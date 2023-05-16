@@ -1,55 +1,46 @@
-<!DOCTYPE html>
-<html lang="en"> 
-    <title> New Sporti-page</title>
-    <head>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
-    </head>
-    <body>
-        
-        <main class="container">
-            <form action="{{url_for('created')}}" method="POST">
+{% extends 'base.html' %}
 
-                <!--Grid-->
-                <div class="grid">
-                    <!--Input is inside label-->
-                    <label for="firstname">
-                        Fornavn
-                        <input type="text" id="firstname" name="firstname" placeholder="First name" required>
-                    </label>
-                    <label for="lastname">
-                        Efternavn
-                        <input type="text" id="lastname" name="lastname" placeholder="Efternavn" required>
-                    </label>
-                </div>
-                    <label for="address">
-                        Adresse
-                        <input type="text" id="address" name="address" placeholder="Adresse" required>
-                    </label>
-                <div class="grid">
-                    <label for="zipcode">
-                        Postnummer
-                        <input type="number" id="zipcode" name="zipcode" placeholder="Postnummer" required>
-                    </label>
-                    <label for="city">
-                        By
-                        <input type="text" id="city" name="city" placeholder="By" required>
-                    </label>
-                </div>
-                    <label for="email">
-                        Emailadresse
-                        <input type="email" id="email" name="email" placeholder="Emailadresse" required>
-                    </label>
-                    <label for="password">
-                        Password
-                        <input type="password" id="password" name="password" placeholder="Password" required>
-                    </label>
-                    <button type="submit"> Sign up </button>
-                </div>
+{% block content %}
+<main class="container">
+    <form action="/signup" method="POST">
 
-            </form>
-        </main>
-        <footer>
+        <!--Grid-->
+        <div class="grid">
+            <!--Input is inside label-->
+            <label for="firstname">
+                Firstname
+                <input type="text" id="firstname" name="firstname" placeholder="Firstname" required>
+            </label>
+            <label for="lastname">
+                Lastname
+                <input type="text" id="lastname" name="lastname" placeholder="Lastname" required>
+            </label>
+        </div>
+            <label for="address">
+                Address
+                <input type="text" id="address" name="address" placeholder="Address" required>
+            </label>
+        <div class="grid">
+            <label for="zipcode">
+                Zipcode
+                <input type="number" id="zipcode" name="zipcode" placeholder="Zipcode" required>
+            </label>
+            <label for="city">
+                City
+                <input type="text" id="city" name="city" placeholder="City" required>
+            </label>
+        </div>
+            <label for="email">
+                Email-address
+                <input type="email" id="email" name="email" placeholder="Email-address" required>
+            </label>
+            <label for="password">
+                Password
+                <input type="password" id="password" name="password" placeholder="Password" required>
+            </label>
+            <button type="submit"> Sign up </button>
+        </div>
 
-        </footer>
-    </body>
-</html>
+    </form>
+</main>
+{% endblock %}

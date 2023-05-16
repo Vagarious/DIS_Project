@@ -1,22 +1,14 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"
-    />
-  </head>
-  <body>
-    <main class="container">
-      <form action="{{url_for('signed_in')}}" method="POST">
-        <label for="name">
-          <input type="text" name="username" placeholder="Username" />
-        </label>
-        <label for="password">
-          <input type="password" name="password" placeholder="Password" />
-        </label>
-        <button type="submit">Log in</button>
-      </form>
-    </main>
-  </body>
-</html>
+{% extends 'base.html' %} {% block content %}
+
+<div class="container">
+  <form action="/login" method="POST">
+    <label for="name">
+      <input type="text" name="username" placeholder="Username" />
+    </label>
+    <label for="password">
+      <input type="password" name="password" placeholder="Password" />
+    </label>
+    <button type="submit">Log in</button>
+  </form>
+</div>
+{% endblock %}

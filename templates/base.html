@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=yes"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"
+    />
+    <title>{% block title %} {% endblock %}</title>
+  </head>
+  <body>
+    <nav class="container-fluid">
+      <a class="navbar-brand" href="{{ url_for('index') }}">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" />
+      </a>
+      <ul>
+        {% if session.name %}
+        <li>{{session.name}}</li>
+        {% else %}
+        <li>
+          <a href="{{ url_for('login') }}"> Sign in</a>
+        </li>
+        {% endif %}
+        <li>
+          <a href="{{ url_for('signup') }}">Sign up</a>
+        </li>
+        <li>Land</li>
+        <li>Søg</li>
+      </ul>
+    </nav>
+    <main class="container-fluid">{% block content %} {% endblock %}</main>
+    <footer></footer>
+  </body>
+</html>
