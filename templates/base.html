@@ -169,7 +169,15 @@
         </li>
       </ul>
     </nav>
-    <main class="container-fluid">{% block content %} {% endblock %}</main>
+    <main class="container-fluid">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %}
+      <ul class="container-fluid">
+        {% for category, message in messages %} {{ category }}: {{ message }} {%
+        endfor %}
+      </ul>
+      {% endif %} {% endwith %} {% block content %} {% endblock %}
+    </main>
     <footer></footer>
   </body>
 </html>
