@@ -15,7 +15,7 @@ Session(app)
 # Connect to the database using psycopg2 library and the database credentials
 conn = psycopg2.connect(
 	host="localhost",
-	database="project_db",
+	database="sportilight",
 	user="postgres",
 	password="!postgres2023!"
 )
@@ -29,22 +29,29 @@ def index():
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
 	if request.method == "POST":
-		print(request.form["password"])
 		firstname = request.form["firstname"]
 		lastname = request.form["lastname"]
+		gender = request.form["gender"]
+		birthdate = request.form["birthdate"]
+		country = request.form["country"]
 		address = request.form["address"]
 		zipcode = request.form["zipcode"]
 		city = request.form["city"]
 		email = request.form["email"]
 		_hashedPassword = generate_password_hash(request.form["password"])
-		print(_hashedPassword)
+		phone = request.form.get('phone')
+
+		if phone is None:
+			print("No phone number is provided")
+		else:
+			print("Phone number: ", phone)
 
 		cur = conn.cursor()
 		cur.execute(
 			"""
-			INSERT INTO users (firstname, lastname, address, zipcode, city, email, password)
-			VALUES (%s, %s, %s, %s, %s, %s, %s)""",
-			(firstname, lastname, address, zipcode, city, email, _hashedPassword)
+			INSERT INTO member (firstname, lastname, gender, birthdate, country, address, zipcode, city, email, password, phone)
+			VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+			(firstname, lastname, gender, birthdate, country, address, zipcode, city, email, _hashedPassword, phone)
 		)
 		conn.commit()
 		return redirect("/")
@@ -58,9 +65,9 @@ def login():
 		print(_hashedPassword)
 		cur = conn.cursor()
 		cur.execute(
-			""" SELECT email, firstname, password FROM users
+			""" SELECT email, firstname, password FROM member
 			WHERE email = '{}';
-			""".format(request.form["username"], _hashedPassword)
+			""".format(request.form["username"])
 		)
 		if cur.rowcount > 0:
 			user = cur.fetchone()

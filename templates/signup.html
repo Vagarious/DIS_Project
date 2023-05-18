@@ -8,18 +8,49 @@
         <div class="grid">
             <!--Input is inside label-->
             <label for="firstname">
-                Firstname
-                <input type="text" id="firstname" name="firstname" placeholder="Firstname" required>
+                First name
+                <input type="text" id="firstname" name="firstname" placeholder="First name" required>
             </label>
             <label for="lastname">
-                Lastname
-                <input type="text" id="lastname" name="lastname" placeholder="Lastname" required>
+                Last name
+                <input type="text" id="lastname" name="lastname" placeholder="Last name" required>
             </label>
         </div>
             <label for="address">
                 Address
                 <input type="text" id="address" name="address" placeholder="Address" required>
             </label>
+            <fieldset>
+                <legend>Gender</legend>
+                <div class="grid">
+                <label for="woman">
+                    Woman
+                    <input type="radio" id="woman" name="gender" value="woman">
+                </label>
+                <label for="man">
+                    Man
+                    <input type="radio" id="man" name="gender" value="man">
+                </label>
+                <label for="other">
+                    Other
+                    <input type="radio" id="other" name="gender" value="other"> 
+                </label>
+                </div>
+            </fieldset>
+        <label for="birthdate">
+            Birthdate
+            <input type="date" id="birthdate" name="birthdate" placeholder="Birthdate" required>
+        </label>
+        <label for="country">
+            Country
+            <select name="country" id="country">
+                <option value="DK" selected>Denmark</option>
+                <option value="FI">Finland</option>
+                <option value="IS">Iceland</option>
+                <option value="NO">Norway</option>
+                <option value="SE">Sweden</option>
+            </select>
+        </label>
         <div class="grid">
             <label for="zipcode">
                 Zipcode
@@ -37,6 +68,10 @@
             <label for="password">
                 Password
                 <input type="password" id="password" name="password" placeholder="Password" required>
+            </label>
+            <label for="phone">
+                Phone number
+                <input type="number" id="phone" name="phone" placeholder="Phone number">
             </label>
             <button type="submit"> Sign up </button>
         </div>
