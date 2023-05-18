@@ -65,22 +65,25 @@ CREATE TABLE member_events(
     eventID INT NOT NULL,
     is_in_future BOOLEAN NOT NULL,
     is_confirmed BOOLEAN NOT NULL,
+    date_for_signup DATE,
     FOREIGN KEY (userID) REFERENCES member(userID),
     FOREIGN KEY (eventID) REFERENCES event(eventID)
 );
+
+\i sql_dll/vw_signups.sql
 
 INSERT INTO member (email, password, firstName, lastName, gender, birthDate, country, address, zipcode, city, phone)
 VALUES ('camillapasser@gmail.com', '123', 'Camilla', 'Passer Hvidman', 'Kvinde', '1997-03-01', 'Danmark', 'Valnøddegården 21', 2620, 'Albertslund', '20661013');
 
 INSERT INTO club (info, name, zipcode, city, email, websiteURL)
-VALUES ('Dette er en beskrivelse af lokalklubben Teitur', 'Teitur Amager', 2300, 'København S', 'sofinejensen@gmail,com', 'www.teitur-amager.dk');
+VALUES ('Dette er en beskrivelse af lokalklubben Teitur', 'Teitur', 2300, 'København S', 'sofinejensen@gmail,com', 'www.teitur-amager.dk');
 
 INSERT INTO event (info, name, price, clubID, locationAddress, locationZipcode, locationCity, locationCountry)
-VALUES ('Dette en en beskrivelse af et event af lokalklubben Teitur', 'Istur', 0, 1, 'Hollænderhallen - Mødelokale 3\nHalvejen 3',2791,'Dragør','Danmark');
+VALUES ('Dette en en beskrivelse af et event af lokalklubben Teitur', 'Teitur: Istur', 0, 1, 'Hollænderhallen - Mødelokale 3\nHalvejen 3',2791,'Dragør','Danmark');
 
 INSERT INTO typeRight(typeRight) VALUES ('Admin');
 INSERT INTO typeRight(typeRight) VALUES ('Member');
 
 INSERT INTO member_rights(userID, clubID, rightID) VALUES (1,1,1);
 
-INSERT INTO member_events(userID, eventID, is_in_future, is_confirmed) VALUES (1,1,'false','true')
+INSERT INTO member_events(userID, eventID, is_in_future, is_confirmed, date_for_signup) VALUES (1,1,'false','true', '2023-05-18')
