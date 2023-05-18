@@ -80,8 +80,16 @@ def login():
 			cur.close()
 			return render_template("error.html")
 
-			
 	return render_template("login.html")
+
+@app.route('/signout', methods=["GET", "POST"])
+def signout():
+	if session["username"] is None:
+		flash("You must sign in before you can sign out!", "warning")
+	else:
+		session["username"] = None
+		session["name"] = None
+	return redirect("/")
 
 if __name__ == '__main__':
 	app.debug=True
