@@ -4,11 +4,12 @@ DROP TABLE IF EXISTS member CASCADE;
 CREATE TABLE member(
     userID SERIAL PRIMARY KEY,
     email VARCHAR NOT NULL,
+    password VARCHAR NOT NULL,
     firstName VARCHAR NOT NULL,
     lastName VARCHAR NOT NULL,
     gender VARCHAR NOT NULL,
     birthDate DATE NOT NULL,
-    nationality VARCHAR NOT NULL,
+    country VARCHAR NOT NULL,
     address VARCHAR NOT NULL,
     zipcode INT NOT NULL,
     city VARCHAR NOT NULL,
@@ -68,8 +69,8 @@ CREATE TABLE member_events(
     FOREIGN KEY (eventID) REFERENCES event(eventID)
 );
 
-INSERT INTO member (email, firstName, lastName, gender, birthDate, nationality, address, zipcode, city, phone)
-VALUES ('camillapasser@gmail.com', 'Camilla', 'Passer Hvidman', 'Kvinde', '1997-03-01', 'Danmark', 'Valnøddegården 21', 2620, 'Albertslund', '20661013');
+INSERT INTO member (email, password, firstName, lastName, gender, birthDate, country, address, zipcode, city, phone)
+VALUES ('camillapasser@gmail.com', '123', 'Camilla', 'Passer Hvidman', 'Kvinde', '1997-03-01', 'Danmark', 'Valnøddegården 21', 2620, 'Albertslund', '20661013');
 
 INSERT INTO club (info, name, zipcode, city, email, websiteURL)
 VALUES ('Dette er en beskrivelse af lokalklubben Teitur', 'Teitur Amager', 2300, 'København S', 'sofinejensen@gmail,com', 'www.teitur-amager.dk');

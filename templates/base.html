@@ -24,10 +24,22 @@
         <li>
           <a href="{{ url_for('login') }}"> Sign in</a>
         </li>
-        {% endif %}
+        {% endif %} {% if session.name %}
+        <li>
+          <details role="list">
+            <summary aria-haspopup="listbox">Basket</summary>
+            <ul role="listbox">
+              <li><a>Action</a></li>
+              <li><a>Another action</a></li>
+              <li><a>Something else here</a></li>
+            </ul>
+          </details>
+        </li>
+        {% else %}
         <li>
           <a href="{{ url_for('signup') }}">Sign up</a>
         </li>
+        {% endif %}
         <li>Land</li>
         <li>Søg</li>
       </ul>
