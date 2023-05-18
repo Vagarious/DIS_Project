@@ -1,5 +1,3 @@
-\c sportilight
-
 DROP TABLE IF EXISTS member CASCADE;
 CREATE TABLE member(
     userID SERIAL PRIMARY KEY,
@@ -72,11 +70,8 @@ CREATE TABLE member_events(
     FOREIGN KEY (eventID) REFERENCES event(eventID)
 );
 
-\i sql_dll/vw_signups.sql
-\i sql_dll/vw_memberships.sql
-
 INSERT INTO member (email, password, firstName, lastName, gender, birthDate, country, address, zipcode, city, phone)
-VALUES ('camillapasser@gmail.com', '123', 'Camilla', 'Passer Hvidman', 'Kvinde', '1997-03-01', 'Danmark', 'Valnøddegården 21', 2620, 'Albertslund', '20661013');
+VALUES ('camillapasser@gmail.com', '$password1', 'Camilla', 'Passer Hvidman', 'Kvinde', '1997-03-01', 'Danmark', 'Valnøddegården 21', 2620, 'Albertslund', '20661013');
 
 INSERT INTO club (info, name, zipcode, city, email, websiteURL)
 VALUES ('Dette er en beskrivelse af lokalklubben Teitur', 'Teitur', 2300, 'København S', 'sofinejensen@gmail,com', 'www.teitur-amager.dk');
