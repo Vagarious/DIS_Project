@@ -14,12 +14,51 @@
   </head>
   <body>
     <nav class="container-fluid">
-      <a class="navbar-brand" href="{{ url_for('index') }}">
-        <img src="{{ url_for('static', filename='images/logo.png') }}" />
-      </a>
+      <ul>
+        <li>
+          <strong>
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+              <img src="{{ url_for('static', filename='images/logo.png') }}" />
+            </a>
+          </strong>
+        </li>
+      </ul>
       <ul>
         {% if session.name %}
-        <li>{{session.name}}</li>
+        <li>
+          <details role="list">
+            <summary
+              aria-haspopup="listbox"
+              style="align-items: center"
+              role="link"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                style="height: 1em; width: 1em; margin-right: 0.25em"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              {{session.name}}
+            </summary>
+            <ul role="listbox">
+              <li>
+                <a>
+                  <b>Profile</b> <br />
+                  Her er indstillinger for din profil.
+                </a>
+              </li>
+              <li><a>Upcomming events</a></li>
+              <li><a>Joined clubs</a></li>
+              <li><a href="{{ url_for('signout') }}">Sign out</a></li>
+            </ul>
+          </details>
+        </li>
         {% else %}
         <li>
           <a href="{{ url_for('login') }}"> Sign in</a>
@@ -27,7 +66,22 @@
         {% endif %} {% if session.name %}
         <li>
           <details role="list">
-            <summary aria-haspopup="listbox">Basket</summary>
+            <summary
+              aria-haspopup="listbox"
+              style="align-items: center"
+              role="link"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                style="height: 1em; width: 1em"
+              >
+                <path
+                  d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 15h11.218a.75.75 0 00.674-.421 60.358 60.358 0 002.96-7.228.75.75 0 00-.525-.965A60.864 60.864 0 005.68 4.509l-.232-.867A1.875 1.875 0 003.636 2.25H2.25zM3.75 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM16.5 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"
+                />
+              </svg>
+            </summary>
             <ul role="listbox">
               <li><a>Action</a></li>
               <li><a>Another action</a></li>
@@ -40,8 +94,79 @@
           <a href="{{ url_for('signup') }}">Sign up</a>
         </li>
         {% endif %}
-        <li>Land</li>
-        <li>Søg</li>
+        <li>
+          <details role="list">
+            <summary
+              aria-haspopup="listbox"
+              style="align-items: center"
+              role="link"
+            >
+              Language
+            </summary>
+            <ul role="listbox">
+              <li>
+                <a>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    id="flag-icons-gb"
+                    viewBox="0 0 640 480"
+                    style="height: 1em; width: 1em"
+                  >
+                    <path fill="#012169" d="M0 0h640v480H0z" />
+                    <path
+                      fill="#FFF"
+                      d="m75 0 244 181L562 0h78v62L400 241l240 178v61h-80L320 301 81 480H0v-60l239-178L0 64V0h75z"
+                    />
+                    <path
+                      fill="#C8102E"
+                      d="m424 281 216 159v40L369 281h55zm-184 20 6 35L54 480H0l240-179zM640 0v3L391 191l2-44L590 0h50zM0 0l239 176h-60L0 42V0z"
+                    />
+                    <path
+                      fill="#FFF"
+                      d="M241 0v480h160V0H241zM0 160v160h640V160H0z"
+                    />
+                    <path
+                      fill="#C8102E"
+                      d="M0 193v96h640v-96H0zM273 0v480h96V0h-96z"
+                    />
+                  </svg>
+                  English
+                </a>
+              </li>
+              <li>
+                <a>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    id="flag-icons-dk"
+                    viewBox="0 0 640 480"
+                    style="height: 1em; width: 1em"
+                  >
+                    <path fill="#c8102e" d="M0 0h640.1v480H0z" />
+                    <path fill="#fff" d="M205.7 0h68.6v480h-68.6z" />
+                    <path fill="#fff" d="M0 205.7h640.1v68.6H0z" />
+                  </svg>
+                  Dansk
+                </a>
+              </li>
+            </ul>
+          </details>
+        </li>
+        <li>
+          <a data-tooltip="Search" data-placement="left">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              style="width: 1em"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10.5 3.75a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM2.25 10.5a8.25 8.25 0 1114.59 5.28l4.69 4.69a.75.75 0 11-1.06 1.06l-4.69-4.69A8.25 8.25 0 012.25 10.5z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </a>
+        </li>
       </ul>
     </nav>
     <main class="container-fluid">{% block content %} {% endblock %}</main>
