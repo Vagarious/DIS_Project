@@ -1,0 +1,26 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+  <h1>Your profile</h1>
+  <hgroup>
+    <h4>{{session.name}}</h4>
+    <p>{{session.city}}, {{session.country}}</p>
+  </hgroup>
+
+  <div class="grid">
+    <div>
+      <a href="{{ url_for('profile_events') }}" role="button">Events</a>
+    </div>
+    <div>
+      <a href="{{ url_for('profile_memberships')}}" role="button"
+        >Memberships</a
+      >
+    </div>
+  </div>
+  <article>
+    <header>{% block header %} {% endblock %}</header>
+    <body>
+      {% block table %} {% endblock %}
+    </body>
+  </article>
+</div>
+{% endblock %}

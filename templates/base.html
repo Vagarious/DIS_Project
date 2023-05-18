@@ -24,7 +24,7 @@
         </li>
       </ul>
       <ul>
-        {% if session.name %}
+        {% if session.firstname %}
         <li>
           <details role="list">
             <summary
@@ -44,11 +44,11 @@
                   clip-rule="evenodd"
                 />
               </svg>
-              {{session.name}}
+              {{session.firstname}}
             </summary>
             <ul role="listbox">
               <li>
-                <a>
+                <a href="{{ url_for('profile') }}">
                   <b>Profile</b> <br />
                   Her er indstillinger for din profil.
                 </a>

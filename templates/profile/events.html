@@ -1,0 +1,22 @@
+{% extends 'profile/profile.html' %} {% block header %} A list of events that
+you have signed up for {% endblock %} {% block table %}
+<table role="grid">
+  <thead>
+    <tr>
+      <th scope="col">Event</th>
+      <th scope="col">Name</th>
+      <th scope="col">Created</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% if not events %} {% else %} {% for event in events %}
+
+    <tr>
+      <th scope="row">{{ event[1] }}</th>
+      <td>{{ event[2] }}</td>
+      <td>{{ event[3] }}</td>
+    </tr>
+    {% endfor %} {% endif %}
+  </tbody>
+</table>
+{% endblock %}

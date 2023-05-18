@@ -1,0 +1,29 @@
+{% extends 'profile/profile.html' %} {% block header %} A list of your
+memberships {% endblock %} {% block table %}
+<table role="grid">
+  <thead>
+    <tr>
+      <th scope="col">Member no.</th>
+      <th scope="col">Name</th>
+      <th scope="col">Club</th>
+      <th scope="col">Status</th>
+      <th scope="col">Expiration</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% if not memberships %} {% else %} {% for membership in memberships %}
+    <tr>
+      <th scope="row">{{ membership[1] }}</th>
+      <td>{{ membership[2] }}</td>
+      <td>{{ membership[3] }}</td>
+      {% if membership[4] is true %}
+      <td>Active</td>
+      {% else %}
+      <td>Inactive</td>
+      {% endif %}
+      <td>{{ membership[5] }}</td>
+    </tr>
+    {% endfor %} {% endif %}
+  </tbody>
+</table>
+{% endblock %}
