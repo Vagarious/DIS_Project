@@ -53,6 +53,8 @@ CREATE TABLE member_rights(
     userID INT NOT NULL,
     clubID INT NOT NULL,
     rightID INT NOT NULL,
+    active BOOLEAN NOT NULL,
+    expiration_date DATE NOT NULL,
     FOREIGN KEY (userID) REFERENCES member(userID),
     FOREIGN KEY (clubID) REFERENCES club(clubID),
     FOREIGN KEY (rightID) REFERENCES typeRight(rightID)
@@ -71,6 +73,7 @@ CREATE TABLE member_events(
 );
 
 \i sql_dll/vw_signups.sql
+\i sql_dll/vw_memberships.sql
 
 INSERT INTO member (email, password, firstName, lastName, gender, birthDate, country, address, zipcode, city, phone)
 VALUES ('camillapasser@gmail.com', '123', 'Camilla', 'Passer Hvidman', 'Kvinde', '1997-03-01', 'Danmark', 'Valnøddegården 21', 2620, 'Albertslund', '20661013');
@@ -84,6 +87,6 @@ VALUES ('Dette en en beskrivelse af et event af lokalklubben Teitur', 'Teitur: I
 INSERT INTO typeRight(typeRight) VALUES ('Admin');
 INSERT INTO typeRight(typeRight) VALUES ('Member');
 
-INSERT INTO member_rights(userID, clubID, rightID) VALUES (1,1,1);
+INSERT INTO member_rights(userID, clubID, rightID, active, expiration_date) VALUES (1,1,1,true,'2023-12-31');
 
 INSERT INTO member_events(userID, eventID, is_in_future, is_confirmed, date_for_signup) VALUES (1,1,'false','true', '2023-05-18')
