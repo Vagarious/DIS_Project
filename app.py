@@ -13,12 +13,14 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Connect to the database using psycopg2 library and the database credentials
-conn = psycopg2.connect(
-	host="localhost",
-	database="sportilight",
-	user="postgres",
-	password="!postgres2023!"
-)
+def get_db_connection():
+	conn = psycopg2.connect(
+		host="localhost",
+		database="sportilight",
+		user="postgres",
+		password="!postgres2023!"
+	)
+	return conn
 
 # Root route
 
@@ -46,6 +48,7 @@ def signup():
 		else:
 			print("Phone number: ", phone)
 
+		conn = get_db_connection()
 		cur = conn.cursor()
 		cur.execute(
 			"""
@@ -54,30 +57,47 @@ def signup():
 			(firstname, lastname, gender, birthdate, country, address, zipcode, city, email, _hashedPassword, phone)
 		)
 		conn.commit()
+		cur.close()
+		conn.close()
 		return redirect("/")
 	return render_template("signup.html")
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
 	if request.method == "POST":
-		print(request.form["password"])
-		_hashedPassword = generate_password_hash(request.form["password"])
-		print(_hashedPassword)
+		conn = get_db_connection()
 		cur = conn.cursor()
 		cur.execute(
-			""" SELECT email, firstname, password FROM member
+			""" SELECT email, 
+			first_name, 
+			password, 
+			concat(first_name, ' ', last_name) as name,
+			city,
+			country,
+			user_id 
+			FROM member
 			WHERE email = '{}';
 			""".format(request.form["username"])
 		)
 		if cur.rowcount > 0:
 			user = cur.fetchone()
 			cur.close()
+			conn.close()
+			print("Hello")
 			if check_password_hash(user[2], request.form["password"]):
 				session["username"] = user[0]
-				session["name"] = user[1]
+				print(user[0])
+				print(user[1])
+				session["firstname"] = user[1]
+				session["name"] = user[3]
+				print(session["name"])
+				session["city"] = user[4]
+				session["country"] = user[5]
+				session["user_id"] = user[6]
 				return redirect("/")
 		else:
 			cur.close()
+			conn.close()
 			return render_template("error.html")
 
 	return render_template("login.html")
@@ -87,9 +107,39 @@ def signout():
 	if session["username"] is None:
 		flash("You must sign in before you can sign out!", "warning")
 	else:
-		session["username"] = None
-		session["name"] = None
+		session.clear()
 	return redirect("/")
+
+
+@app.route('/profile', methods=["GET", "POST"])
+def profile():
+	return render_template("profile/profile.html")
+
+@app.route('/profile/events', methods=["GET", "POST"])
+def profile_events():
+	conn = get_db_connection()
+	cur = conn.cursor()
+	cur.execute(
+		"SELECT * FROM signups WHERE user_id = {}"
+		.format(session["user_id"])
+	)
+	events = cur.fetchall()
+	cur.close()
+	conn.close()
+	return render_template("profile/events.html", events=events)
+
+@app.route('/profile/memberships', methods=["GET", "POST"])
+def profile_memberships():
+	conn = get_db_connection()
+	cur = conn.cursor()
+	cur.execute(
+		"SELECT * FROM memberships WHERE user_id = {}"
+		.format(session["user_id"])
+	)
+	memberships = cur.fetchall()
+	cur.close()
+	conn.close()
+	return render_template("profile/memberships.html", memberships=memberships)
 
 if __name__ == '__main__':
 	app.debug=True
