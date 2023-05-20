@@ -1,7 +1,7 @@
+from db import *
 from flask import Flask, flash, render_template, request, session, redirect, url_for
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
-import psycopg2
 
 # Create a Flask app
 app = Flask(__name__)
@@ -11,16 +11,6 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
-
-# Connect to the database using psycopg2 library and the database credentials
-def get_db_connection():
-	conn = psycopg2.connect(
-		host="localhost",
-		database="sportilight",
-		user="postgres",
-		password="!postgres2023!"
-	)
-	return conn
 
 # Root route
 

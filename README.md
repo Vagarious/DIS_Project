@@ -14,6 +14,15 @@ Assumes a working Python 3 installation (with python=python3 and pip=pip3).
 
 > $ .\venv\Scripts\activate
 
-(3) Database initialization
+(3) Install dependencies in the virtual environment
 
-1. Set the database name in the **init**.py
+> $ pip install -r requirements.txt
+
+(4) Database initialization
+
+1. Set the database name and user in the **db**.py
+2. Run **db_setup**.py
+
+(5) Run wep-app
+
+> $ python app.py
