@@ -1,13 +1,6 @@
+from db import *
 from string import Template
 from werkzeug.security import generate_password_hash
-import psycopg2
-
-conn = psycopg2.connect(
-	host="localhost",
-	database="sportilight",
-	user="postgres",
-	password="!postgres2023!"
-)
 
 # Below is the section to run the database initialisation
 db_init_path = 'db_init.sql'
@@ -31,9 +24,11 @@ vw_signups_path = 'sql_dll\\vw_signups.sql'
 with open(vw_signups_path, 'r') as fp:
     vw_signups = fp.read()
 
-
+conn = get_db_connection()
 cur = conn.cursor()
 cur.execute(query)
 cur.execute(vw_memberships)
 cur.execute(vw_signups)
 conn.commit()
+cur.close()
+conn.close()
