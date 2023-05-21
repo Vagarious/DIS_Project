@@ -254,6 +254,86 @@ def clubpage(club_id):
 			past_events=past_events,
 			today=date.today())
 
+@app.route('/eventpage/<int:event_id>')
+def eventpage(event_id):
+	conn = get_db_connection()
+	cur = conn.cursor()
+	cur.execute("SELECT * FROM event WHERE event_id = {id}"
+	     .format(id = event_id))
+	event = Event(cur.fetchone())
+	cur.close()
+	conn.close()
+	return render_template('events/eventpage.html', event=event)
+
+@app.route('/events/signup/<int:event_id>', methods=["GET","POST"])
+def event_signup(event_id):
+	if request.method == "GET":
+		if (session.get('user_id') is None):
+			flash("You must sign up or log in before signing up for events", "error")
+			return redirect("/")
+		else:
+			conn = get_db_connection()
+			cur = conn.cursor()
+			cur.execute("SELECT is_confirmed FROM member_events WHERE user_id = {user_id} AND event_id = {event_id}"
+	       		.format(user_id = session["user_id"], event_id = event_id)
+		   	)
+			registrationStatus = cur.fetchone()
+			if registrationStatus is None:
+				exists = False
+				confirmed = False
+			elif registrationStatus[0] is False:
+				exists = True
+				confirmed = False
+			elif registrationStatus[0]:
+				exists = True
+				confirmed = True
+			# if entry exists and is false, then the user is registered but not confirmed
+			# if the entry exists and is true, then the user has confirmed the registration
+			# if the entry does not exists, then the user hasn't signed up for the event and is shown the form
+			cur.execute("SELECT * FROM event WHERE event_id = {id}".format(id = event_id))
+			event = Event(cur.fetchone())
+			cur.close()
+			conn.close()
+			return render_template("events/event_signup.html", event=event, exists=exists, confirmed=confirmed)
+	else:
+		conn = get_db_connection()
+		cur = conn.cursor()
+		# conditional insert
+		cur.execute(
+		"""
+		INSERT INTO member_events(user_id,event_id,is_confirmed)
+		SELECT {user_id},{event_id},false
+		WHERE NOT EXISTS (
+			SELECT 1 from member_events WHERE user_id = {user_id} and event_id = {event_id})
+		""".format(user_id = session["user_id"], event_id = event_id)
+		)
+		conn.commit()
+		cur.execute("SELECT * FROM event WHERE event_id = {id}".format(id = event_id))
+		event = Event(cur.fetchone())
+		cur.close()
+		conn.close()
+		return render_template('events/event_signup.html', event=event, exists=True, confirmed=False)
+
+@app.route('/events/participants/<int:event_id>')
+def event_participants(event_id):
+	conn = get_db_connection()
+	cur = conn.cursor()
+	cur.execute(
+		"""
+		SELECT CONCAT(first_name, ' ', last_name)
+		FROM member_events
+		INNER JOIN member ON member_events.user_id = member.user_id
+		WHERE event_id = {id}
+		""".format(id=event_id)
+		)
+	participants = cur.fetchall()
+	print(participants[0])
+	cur.execute("SELECT * FROM event WHERE event_id = {id}".format(id = event_id))
+	event = Event(cur.fetchone())
+	cur.close()
+	conn.close()		
+	return render_template("events/participants.html", event=event, participants=participants[0])
+
 @app.route('/external/<url>')
 def external(url):
 	if url.startswith('http'):
