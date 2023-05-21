@@ -1,4 +1,6 @@
 from db import *
+from classes import *
+from datetime import date
 from flask import Flask, flash, render_template, request, session, redirect, url_for
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -130,6 +132,135 @@ def profile_memberships():
 	cur.close()
 	conn.close()
 	return render_template("profile/memberships.html", memberships=memberships)
+
+@app.route('/overview', methods=["GET", "POST"])
+def club_overview():
+	if request.method == "GET":
+		conn = get_db_connection()
+		cur = conn.cursor()
+		cur.execute(
+			"SELECT * from club"
+		)
+		clubs = cur.fetchall()
+		list_of_clubs = []
+		for club in clubs:
+			list_of_clubs.append(Club(club))
+
+		return render_template("club_overview.html", clubs=list_of_clubs)
+	else:
+		# Three cases
+		searchText = request.form.get('search_text')
+		region_selected = request.form.get('search_region')
+		conn = get_db_connection()
+		cur = conn.cursor()
+		# Case 1: Searchtext and no region selected
+		if searchText is not None and region_selected is None:
+			cur.execute(
+				"""
+				SELECT * FROM club
+				WHERE LOWER(name) like LOWER('%{search}%') OR
+				zipcode::TEXT = '%{search}%' OR
+				LOWER(city) like LOWER('%{search}%')
+				"""
+				.format(search=searchText)
+			)
+		# Case 2: No searchtext but region selected
+		elif searchText is None and region_selected is not None:
+			if region_selected == "all":
+				return redirect('/overview')
+			cur.execute(
+				"""
+				SELECT * FROM club
+				WHERE zipcode IN (
+					SELECT zipcode FROM region_{region}
+				)
+				""".format(region=region_selected)
+			)
+		else:
+		# Case 3: Both searchtext and region selected
+			if region_selected == "all":
+				cur.execute(
+					"""
+					SELECT * FROM club
+					WHERE LOWER(name) like LOWER('%{search}%') OR
+					zipcode::TEXT = '%{search}%' OR
+					LOWER(city) like LOWER('%{search}%')
+					"""
+					.format(search=searchText)
+				)
+			else:
+				cur.execute(
+					"""
+					SELECT * FROM club
+					WHERE
+						(LOWER(name) like LOWER('%{search}%') OR
+						zipcode::TEXT = '%{search}%' OR
+						LOWER(city) like LOWER('%{search}%'))
+
+						AND
+		
+						(zipcode IN (
+							SELECT zipcode FROM region_{region}))
+					""".format(search=searchText, region=region_selected)
+				)
+		clubs=cur.fetchall()
+		list_of_clubs = []
+		for club in clubs:
+			list_of_clubs.append(Club(club))
+		cur.close()
+		conn.close()
+		return render_template("club_overview.html", clubs=list_of_clubs)
+
+@app.route('/clubpage/<int:club_id>')
+def clubpage(club_id):
+	conn = get_db_connection()
+	cur = conn.cursor()
+	cur.execute(
+		"SELECT * from club WHERE club_id = {}"
+		.format(club_id)
+	)
+	club = Club(cur.fetchone())
+	# Get upcomming / future events
+	cur.execute(
+		"""
+		SELECT * FROM event WHERE club_id = {id} AND
+		date_from >= '{date}'
+		"""
+		.format(id = club.club_id,
+	  		date = date.today())
+	)
+	fevents = cur.fetchall()
+	future_events = []
+	for event in fevents:
+		future_events.append(Event(event))
+	# Get past events
+	cur.execute(
+		"""
+		SELECT * FROM event WHERE club_id = {id} AND
+		date_from < '{date}'
+		""".format(id = club.club_id,
+	     	date = date.today())
+	)
+	pevents = cur.fetchall()
+	past_events = []
+	for event in pevents:
+		past_events.append(Event(event))
+	cur.close()
+	conn.close()
+	print("Today: " + str(date.today()))
+	return render_template('clubpage.html', 
+			club=club,
+			future_events=future_events,
+			past_events=past_events,
+			today=date.today())
+
+@app.route('/external/<url>')
+def external(url):
+	if url.startswith('http'):
+		website = url
+	else:
+		website = "http://" + url
+	return redirect(website)
 
 if __name__ == '__main__':
 	app.debug=True

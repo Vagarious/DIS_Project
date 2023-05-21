@@ -1,0 +1,53 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+  <h1>Clubs</h1>
+  Here you can find the clubs located all around the country
+
+  <label for="search_parameters">
+    <form action="/overview" method="POST" name="search_parameters">
+      <div class="grid">
+        <label for="search_field">
+          <input
+            type="search"
+            id="search_text"
+            name="search_text"
+            placeholder="Search"
+          />
+        </label>
+        <label for="region_selector">
+          <select
+            onchange="search_parameters.submit()"
+            name="search_region"
+            id="search_region"
+          >
+            <option value="none" disabled selected>Select region</option>
+            <option value="all">Alle</option>
+            <option value="nordjylland">Nordjylland</option>
+            <option value="midtjylland">Midtjylland</option>
+            <option value="syddanmark">Syddanmark</option>
+            <option value="sjælland">Sjælland</option>
+            <option value="hovedstaden">Hovedstaden</option>
+          </select>
+        </label>
+      </div>
+    </form>
+  </label>
+  {% if not clubs %} {% else %}
+  <table role="grid">
+    <tbody>
+      {% for club in clubs %}
+      <tr>
+        <th scope="row">
+          <a href="{{ url_for('clubpage', club_id=club.club_id) }}"
+            >{{ club.name }}</a
+          >
+        </th>
+        <td>{{club.zipcode}}</td>
+        <td>{{club.city}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</div>
+{% endblock %}

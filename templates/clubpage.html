@@ -1,0 +1,99 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+  <h1>{{ club.name }}</h1>
+</div>
+<article>
+  <body>
+    <b>About this club</b> <br />
+    {{club.info }}
+  </body>
+</article>
+<details>
+  <summary role="button" class="secondary">Contact information</summary>
+  <p>
+    <b>{{ club.name }}</b> <br />
+    {{club.zipcode}} {{club.city}}
+  </p>
+  <p>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      style="height: 1em; width: 1em; margin-right: 0.25em"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M17.834 6.166a8.25 8.25 0 100 11.668.75.75 0 011.06 1.06c-3.807 3.808-9.98 3.808-13.788 0-3.808-3.807-3.808-9.98 0-13.788 3.807-3.808 9.98-3.808 13.788 0A9.722 9.722 0 0121.75 12c0 .975-.296 1.887-.809 2.571-.514.685-1.28 1.179-2.191 1.179-.904 0-1.666-.487-2.18-1.164a5.25 5.25 0 11-.82-6.26V8.25a.75.75 0 011.5 0V12c0 .682.208 1.27.509 1.671.3.401.659.579.991.579.332 0 .69-.178.991-.579.3-.4.509-.99.509-1.671a8.222 8.222 0 00-2.416-5.834zM15.75 12a3.75 3.75 0 10-7.5 0 3.75 3.75 0 007.5 0z"
+        clip-rule="evenodd"
+      />
+    </svg>
+    {{ club.email }}
+  </p>
+  <p>
+    <a href="{{ url_for('external', url=club.website) }}">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        style="height: 1em; width: 1em; margin-right: 0.25em"
+      >
+        <path
+          d="M21.721 12.752a9.711 9.711 0 00-.945-5.003 12.754 12.754 0 01-4.339 2.708 18.991 18.991 0 01-.214 4.772 17.165 17.165 0 005.498-2.477zM14.634 15.55a17.324 17.324 0 00.332-4.647c-.952.227-1.945.347-2.966.347-1.021 0-2.014-.12-2.966-.347a17.515 17.515 0 00.332 4.647 17.385 17.385 0 005.268 0zM9.772 17.119a18.963 18.963 0 004.456 0A17.182 17.182 0 0112 21.724a17.18 17.18 0 01-2.228-4.605zM7.777 15.23a18.87 18.87 0 01-.214-4.774 12.753 12.753 0 01-4.34-2.708 9.711 9.711 0 00-.944 5.004 17.165 17.165 0 005.498 2.477zM21.356 14.752a9.765 9.765 0 01-7.478 6.817 18.64 18.64 0 001.988-4.718 18.627 18.627 0 005.49-2.098zM2.644 14.752c1.682.971 3.53 1.688 5.49 2.099a18.64 18.64 0 001.988 4.718 9.765 9.765 0 01-7.478-6.816zM13.878 2.43a9.755 9.755 0 016.116 3.986 11.267 11.267 0 01-3.746 2.504 18.63 18.63 0 00-2.37-6.49zM12 2.276a17.152 17.152 0 012.805 7.121c-.897.23-1.837.353-2.805.353-.968 0-1.908-.122-2.805-.353A17.151 17.151 0 0112 2.276zM10.122 2.43a18.629 18.629 0 00-2.37 6.49 11.266 11.266 0 01-3.746-2.504 9.754 9.754 0 016.116-3.985z"
+        />
+      </svg>
+      {{club.website}}
+    </a>
+  </p>
+</details>
+<div class="article">
+  <h2>Upcomming events</h2>
+  {% if not future_events %} {% else %}
+  <table role="grid">
+    <tbody>
+      {% for future_event in future_events %}
+      <tr>
+        <th scope="row">
+          <a>{{ future_event.name }}</a>
+        </th>
+        <td>{{future_event.date_from}}</td>
+        <td>{{future_event.zipcode}}, {{future_event.city}}</td>
+        <td>
+          {% if future_event.is_cancelled %}
+          <b>Cancelled</b>
+          {% elif today >= future_event.signup_opens and today <
+          future_event.signup_closes %} Open for signup {% elif today >
+          future_event.signup_closes %} Signup date has passed {% elif
+          future_event.signup_opens > today %} Not yet open for signup <br />
+          <small> Opens {{future_event.signup_opens}}</small>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</div>
+<div class="article">
+  <h2>Past events</h2>
+  {% if not past_events %} {% else %}
+  <table role="grid">
+    <tbody>
+      {% for past_event in past_events %}
+      <tr>
+        <th scope="row">
+          <a>{{ past_event.name }}</a>
+        </th>
+        <td>{{past_event.date_from}}</td>
+        <td>{{past_event.zipcode}}, {{past_event.city}}</td>
+        <td>
+          {% if past_event.is_cancelled %}
+          <b>Cancelled</b>
+          {% else %} Read more {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</div>
+{% endblock %}
