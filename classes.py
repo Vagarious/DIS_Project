@@ -15,7 +15,7 @@ class Event(tuple):
         self.event_id = event_data[0]
         self.name = event_data[1]
         self.info = event_data[2]
-        self.info = event_data[3]
+        self.max_spots = event_data[3]
         self.date_from = event_data[4]
         self.date_to = event_data[5]
         self.time_from = event_data[6]
@@ -29,3 +29,4 @@ class Event(tuple):
         self.city = event_data[14]
         self.country = event_data[15]
         self.is_cancelled = event_data[16]
+        self.participants = event_data[17]

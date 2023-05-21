@@ -53,7 +53,9 @@
       {% for future_event in future_events %}
       <tr>
         <th scope="row">
-          <a>{{ future_event.name }}</a>
+          <a href="{{ url_for('eventpage', event_id=future_event.event_id) }}"
+            >{{ future_event.name }}</a
+          >
         </th>
         <td>{{future_event.date_from}}</td>
         <td>{{future_event.zipcode}}, {{future_event.city}}</td>
@@ -81,7 +83,9 @@
       {% for past_event in past_events %}
       <tr>
         <th scope="row">
-          <a>{{ past_event.name }}</a>
+          <a href="{{ url_for('eventpage', event_id=past_event.event_id) }}"
+            >{{ past_event.name }}</a
+          >
         </th>
         <td>{{past_event.date_from}}</td>
         <td>{{past_event.zipcode}}, {{past_event.city}}</td>

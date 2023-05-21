@@ -22,6 +22,11 @@ events_path = 'sql_dll\\events.sql'
 with open(events_path, 'r') as fp:
     events = fp.read()
 
+# Below is the section to run creation of user signups
+member_events_path = 'sql_dll\\member_events.sql'
+with open(member_events_path, 'r') as fp:
+    member_events = fp.read()
+
 # Below is the section to run creation of the different regions
 region_nordjylland_path = 'sql_dll\\regions\\region_nordjylland.sql'
 with open(region_nordjylland_path, 'r') as fp:
@@ -60,6 +65,7 @@ cur = conn.cursor()
 cur.execute(query)
 cur.execute(clubs)
 cur.execute(events)
+cur.execute(member_events)
 cur.execute(region_nordjylland)
 cur.execute(region_midtjylland)
 cur.execute(region_syddanmark)

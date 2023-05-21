@@ -44,6 +44,7 @@ CREATE TABLE event(
     city VARCHAR NOT NULL,
     country VARCHAR NOT NULL,
     is_cancelled BOOLEAN NOT NULL,
+    participants INT NOT NULL,
     FOREIGN KEY (club_id) REFERENCES club(club_id)
 );
 
@@ -71,7 +72,6 @@ CREATE TABLE member_events(
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
     event_id INT NOT NULL,
-    is_in_future BOOLEAN NOT NULL,
     is_confirmed BOOLEAN NOT NULL,
     date_for_signup DATE,
     FOREIGN KEY (user_id) REFERENCES member(user_id),

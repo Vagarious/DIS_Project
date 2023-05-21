@@ -1,0 +1,18 @@
+{% extends 'events/eventpage.html' %} {% block header %} A list of participants
+{% endblock %} {% block body %}
+<table role="grid">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% if not participants %} {% else %} {% for participant_name in participants
+    %}
+    <tr>
+      <th scope="row">{{ participant_name }}</th>
+    </tr>
+    {% endfor %} {% endif %}
+  </tbody>
+</table>
+{% endblock %}

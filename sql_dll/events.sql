@@ -1,5 +1,5 @@
 INSERT INTO
-    event(name, info, max_spots, date_from, date_to, time_from, time_to, signup_opens, signup_closes, price, club_id, address, zipcode, city, country, is_cancelled)
+    event(name, info, max_spots, date_from, date_to, time_from, time_to, signup_opens, signup_closes, price, club_id, address, zipcode, city, country, is_cancelled, participants)
 VALUES
     -- Teitur events - id:44
     ('Foredrag m. Victoria van Rooji','Foredrag omkring hove/skoning med Victoria Ingemann van Rooji.
@@ -10,7 +10,7 @@ VALUES
     150kr. ekskl. administrationsgebyr for Teitur medlemmer.
     300kr. ekskl. administrationsgebyr for ikke medlemmer.
     Prisen er inkl. sandwich og sodavand.',
-    35,'2023-06-08','2023-06-08',null,null,'2023-05-01','2023-06-01',150,44,'Hollænderhallen - Mødelokale 3, Halvejen 3',2791,'Dragør','Danmark',false),
+    35,'2023-06-08','2023-06-08',null,null,'2023-05-01','2023-06-01',150,44,'Hollænderhallen - Mødelokale 3, Halvejen 3',2791,'Dragør','Danmark',false,0),
 
     ('Kursus med Maj-Brit Rønnov','Jeg kommer til Sjælland og tilbyder 2 kurser. Jeg bygger dem op udelukkende med fokus på den islandske hest. Det er vigtigt for mig at man har en god kontakt til sin hest og at man mærker den vil én og nyder selskabet og arbejdet med den. Jeg har i over 15 år udbudt undervisning, ridelejre, weekendkurser mm med hovedfokus på at styrke samarbejdet med hesten, nørde i dens psykologi, reaktioner og kommunikation. Sammen med dette har jeg en stor interesse i at give mine kursister redskaber til at arbejde med hesten på forskellige måder, der styrker dens balance, muskulatur, kropskontrol og lysten til at lære.
     Normalt afholder disse kurser på mit kursuscenter i Ringkøbing men jeg har i samarbejde med Anette Bøgvald Sainis planlagt to kurser på hendes sted.
@@ -31,7 +31,7 @@ VALUES
     Prisen for deltagelse uden hest er 940 kr. ekskl. SPORTI administrationsgebyr.
     Kurset varer lørdag kl. 9 til ca. 19 og søndag 9-16.30 ca.
     Jeg glæder mig til at komme på besøg og nørde med jeres heste og give jer en masse gode redskaber til hesten.',
-    20,'2023-06-17','2023-06-18',null,null,'2023-05-01','2023-06-12',1875,44,'Tømmerupvej 269',2791,'Dragør','Danmark',false),
+    20,'2023-06-17','2023-06-18',null,null,'2023-05-01','2023-06-12',1875,44,'Tømmerupvej 269',2791,'Dragør','Danmark',false,0),
 
     ('Kursus med Maj-Brit Rønnov','Jeg kommer til Sjælland og tilbyder 2 kurser. Jeg bygger dem op udelukkende med fokus på den islandske hest. Det er vigtigt for mig at man har en god kontakt til sin hest og at man mærker den vil én og nyder selskabet og arbejdet med den. Jeg har i over 15 år udbudt undervisning, ridelejre, weekendkurser mm med hovedfokus på at styrke samarbejdet med hesten, nørde i dens psykologi, reaktioner og kommunikation. Sammen med dette har jeg en stor interesse i at give mine kursister redskaber til at arbejde med hesten på forskellige måder, der styrker dens balance, muskulatur, kropskontrol og lysten til at lære.
     Normalt afholder disse kurser på mit kursuscenter i Ringkøbing, men jeg har i samarbejde med Anette Bøgvald Sainis planlagt to kurser på hendes sted.
@@ -47,7 +47,7 @@ VALUES
     Prisen pr. kursus er 1875 kr. ekskl. SPORTI administrationsgebyr.
     Der er plads til 10 deltagere med hest.
     Jeg glæder mig til at komme på besøg og nørde med jeres heste og give jer en masse gode redskaber til hesten.',
-    20,'2023-08-19','2023-08-20',null,null,'2023-06-19','2023-08-14',1875,44,'Tømmerupvej 269',2791,'Dragør','Danmark',false),
+    20,'2023-08-19','2023-08-20',null,null,'2023-06-19','2023-08-14',1875,44,'Tømmerupvej 269',2791,'Dragør','Danmark',false,0),
 
 
     ('Generalforsamling 2023','Indkaldelse til Generalforsamling onsdag d. 22 marts 2023 kl. 19.
@@ -74,20 +74,20 @@ VALUES
     Tid og sted: onsdag d. 22 marts 2023 kl. 19. Hollænderhallen – Halvejen 3, 2791 Dragør.
     Teitur byder på kage og kaffe/te og vil derfor gerne have din tilmelding via www.sporti.dk.
     Vi har altid brug for flere kræfter i bestyrelsen og håber, at flere har lyst til at stille op. Vil du gerne være med i dette spændende arbejde og sætte dit præg på klubben, kan du give os besked via mail. Eller du kan oplyse det på selve dagen inden afstemning. Har du i øvrigt forslag, som du gerne vil have behandlet på generalforsamlingen, skal disse være os i hænde senest 8 dage inden generalforsamlingen.',
-    20,'2023-03-22','2023-03-22','19:00:00','20:00:00','2023-03-01','2023-03-22',0,44,'Hollænderhallen Mødelokale 3, Halvejen 3',2791,'Dragør','Danmark',false),
+    20,'2023-03-22','2023-03-22','19:00:00','20:00:00','2023-03-01','2023-03-22',0,44,'Hollænderhallen Mødelokale 3, Halvejen 3',2791,'Dragør','Danmark',false,0),
 
     ('Gangartsforedrag','Foredrag om hestens gangarter med Anne Sofie Nielsen.
     Kom til et spændende foredrag med Anne Sofie Nielsen (Fie), hvor vi skal fordybe os i hestens ga.ngarter og bevægelser. Fie vil gøre os klogere på hestens gangarter ved hjælp af videoer og billeder, samt komme med tips til at forbedre den enkelte gangart.
     Fie har en lang uddannelsesbaggrund ang. heste bag sig, og er blandt andet tilknyttet DI’s instruktøruddannelse som censor og underviser.
     Så det er sikkert at sige, at Fie vil have en masse gode tips klar til jer :-)
     Foredraget er onsdag d. 8 marts 2023 kl. 18:30, og vil blive afholdt i Hollænderhallen - Halvejen 3, 2791 Dragør. Mødelokale 3.',
-    35,'2023-03-08','2023-03-08','18:30:00','20:00:00','2023-01-25','2023-03-05',150,44,'Hollænderhallen Mødelokale 3, Halvejen 3',2791,'Dragør','Danmark',false),
+    35,'2023-03-08','2023-03-08','18:30:00','20:00:00','2023-01-25','2023-03-05',150,44,'Hollænderhallen Mødelokale 3, Halvejen 3',2791,'Dragør','Danmark',false,0),
 
     ('Foredrag: Hestens Pain Face','Foredrag om hestens Pain Face og smerteadfærd af dyrlæge og hesteosteopat Karina Gleerup.
     Dyrelæge Karina Gleerup har i sin Ph.d.-afhandling beskrevet hestens Pain Face og har igennem en årrække forsket i genkendelse af smerter hos hest ved Københavns Universitet. Det har givet en stor viden omkring smerteadfærd, som er en uvurderlig hjælp i hendes nuværende arbejde som hesteosteopat. Karina Gleerup har sideløbende holdt utallige foredrag om emnet for både dyrlæger og dyreejere i Danmark og internationalt.
     Karina Gleerup vil ved hjælp af billeder og film lære os, hvordan vi kan tolke og forstå hestens ansigtsudtryk og adfærd som tegn på smerter. Hvordan vi bliver bedre til at opdage at hesten har ondt og derved bliver i stand til at hjælpe den i tide.
     Foredraget er onsdag d. 18 januar 2023 kl. 18:30, og vil blive afholdt i Hollænderhallen - Halvejen 3, 2791 Dragør. Mødelokale 3.',
-    35,'2023-01-18','2023-01-18','18:30:00','20:00:00','2022-12-14','2023-01-15',150,44,'Hollænderhallen Mødelokale 3 - Halvejen 3',2791,'Dragør','Danmark',false),
+    35,'2023-01-18','2023-01-18','18:30:00','20:00:00','2022-12-14','2023-01-15',150,44,'Hollænderhallen Mødelokale 3 - Halvejen 3',2791,'Dragør','Danmark',false,0),
 
     ('Weekendkursus med Anne Sofie Nielsen','Anne Sofie Nielsen (Fie) kommer igen til Amager og afholder weekendkursus den 1.-2. oktober 2022.
     Udover et hav af VM og NM deltagelser samt medaljer, så fokuserer Fie altid på at videreuddanne sig, så hun hele tiden fornyer sig. Læs evt. mere om Fies baggrund på hendes hjemmesiden: http://nordhest.com/stutteriet/
@@ -96,7 +96,7 @@ VALUES
     Sted: Stald Lysholm, Frieslandsvej 71, Dragør.
     Sidste frist for bindende tilmelding er den 21. september 2022 og max. deltagerantal er 10 ekvipager. Tilmelding er nu åbent for alle - også ikke-medlemmer.
     Vi glæder og til at se dig til et spændende og lærerigt weekendkursus.',
-    10,'2022-10-01','2022-10-02',null,null,'2022-08-01','2022-09-21',1500,44,'Frieslandsvej 71',2791,'Dragør','Danmark',true),
+    10,'2022-10-01','2022-10-02',null,null,'2022-08-01','2022-09-21',1500,44,'Frieslandsvej 71',2791,'Dragør','Danmark',true,0),
     -- Hrimnir event - id:29
     ('Undervisning med Pernille Lyager Møller','Hrimnir er stolte af igen at kunne tilbyde undervisning med fantastiske Pernille Lyager Møller.
     Pernille er uddannet berider og rideinstruktør fra Hólar University i Island og er dermed FEIF level 3 instruktør.
@@ -113,7 +113,7 @@ VALUES
     For juniorer (under 22 år) giver Hrimnir et tilskud på 250 kr per undervisning.
     Derudover er det muligt for Hrimnir medlemmer at leje klubbens trailer. Denne bookes separat på Sporti. 
     Evt. forplejning og drikkevarer skal du selv medbringe, da der ikke er mulighed for at købe på stederne.',
-    null,'2023-06-24','2023-06-25',null,null,'2023-05-01','2023-06-21',650,29,'Lejrvej 2',3500,'Værløse','Danmark',false),
+    0,'2023-06-24','2023-06-25',null,null,'2023-05-01','2023-06-21',650,29,'Lejrvej 2',3500,'Værløse','Danmark',false,0),
 
     ('Kratlusker-stævne i Vestskoven','D. 10 september inviterer Hrimnir til Kratlusker-stævne i Vestskoven, med base på Kroppedal.
     Stævnet er et hyggestævne, som ikke kræver rytterlicens.
@@ -126,7 +126,7 @@ VALUES
     Toilettet har åbent fra 12 – 16
     Man medbringer selv fold grej og sætter sin fold op på plænen, efter anvisning.
     Husk også en vandbalje, vi vil sætte en vandtank, grev og en trillebør som man kan bruge til at rydde op efter sin hest.',
-    45,'2023-09-10','2023-09-10',null,null,'2023-05-01','2023-08-31',200,29,'Kroppedals Alle 3',2630,'Taastrup','Danmark',false),
+    45,'2023-09-10','2023-09-10',null,null,'2023-05-01','2023-08-31',200,29,'Kroppedals Alle 3',2630,'Taastrup','Danmark',false,0),
 
     ('Havrebjerggaard Trec-event 2023','Hrimnir er stolte over endnu en gang at kunne byde velkommen til Havrebjergaard Trec-event. I år udvider vi stævnet til at bestå af to dele; en forhindringsbane, som rides individuelt og et Orienteringsridt, som rides i grupper af tre-fire ryttere.
     Pris for deltagelse 100 kr. for voksne og 50 kr for unge under 22 år.
@@ -149,4 +149,4 @@ VALUES
     Medbring egen vandspand. Folden skal rengøres, før du forlader den.
     Der forefindes også tre bomme tæt på ridebanen, hvor din hest kan bindes.
     Der er mulighed for at parkere et begrænset antal trailere på Havrebjerggaard.',
-    null,'2023-04-30','2023-04-30','09:00:00','13:00:00','2023-01-01','2023-04-01',100,29,'Snubbekorsvej 9',2630,'Taastrup','Danmark',false);
+    0,'2023-04-30','2023-04-30','09:00:00','13:00:00','2023-01-01','2023-04-01',100,29,'Snubbekorsvej 9',2630,'Taastrup','Danmark',false,0);
