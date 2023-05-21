@@ -1,0 +1,42 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+  <h1>{{event.name}}</h1>
+  <hgroup>
+    {% if event.date_from == event.date_to and not event.time_from %}
+    <h4>{{event.date_from}}</h4>
+    {% elif event.date_from == event.date_to and event.time_from and
+    event.time_to %}
+    <h4>{{event.date_from}} {{event.time_from}}-{{event.time_to}}</h4>
+    {% elif event.date_from != event.date_to %}
+    <h4>{{event.date_from}}-{{event.date_to}}</h4>
+    {% endif %} {% if event.max_spots == 0 and event.participants > 0 %}
+    <p>{{event.participants}} signed up</p>
+    {% elif event.max_spots >= 0 and event.participants > 0 %}
+    <p>{{event.participants}} signed up, {{event.max_spots}} available spots</p>
+    {% else %} {% endif %}
+  </hgroup>
+
+  <div class="grid">
+    <div>
+      <a
+        href="{{ url_for('event_signup', event_id=event.event_id) }}"
+        role="button"
+        >Sign up</a
+      >
+    </div>
+    <div>
+      <a
+        href="{{ url_for('event_participants', event_id=event.event_id) }}"
+        role="button"
+        >Participants</a
+      >
+    </div>
+  </div>
+  <article>
+    <header>{% block header %} About the event {% endblock %}</header>
+    <body>
+      {% block body %} {{event.info}} {% endblock %}
+    </body>
+  </article>
+</div>
+{% endblock %}

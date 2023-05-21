@@ -1,0 +1,10 @@
+{% extends 'events/eventpage.html' %} {% block header %} Sign up for the event
+{% endblock %} {% block body %} {% if exists and confirmed %}
+<h4>You have already signed up for this event</h4>
+{% elif exists and not confirmed %}
+<h4>You need to confirm your registration</h4>
+{% else %}
+<form method="POST">
+  <button type="sumbit">Sign up for event</button>
+</form>
+{% endif %} {% endblock %}
