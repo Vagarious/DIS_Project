@@ -27,6 +27,11 @@ member_events_path = 'sql_dll\\member_events.sql'
 with open(member_events_path, 'r') as fp:
     member_events = fp.read()
 
+# Below is the section to add rights to users
+member_rights_path = 'sql_dll\member_rights.sql'
+with open(member_rights_path, 'r') as fp:
+    member_rights = fp.read()
+
 # Below is the section to run creation of the different regions
 region_nordjylland_path = 'sql_dll\\regions\\region_nordjylland.sql'
 with open(region_nordjylland_path, 'r') as fp:
@@ -66,6 +71,7 @@ cur.execute(query)
 cur.execute(clubs)
 cur.execute(events)
 cur.execute(member_events)
+cur.execute(member_rights)
 cur.execute(region_nordjylland)
 cur.execute(region_midtjylland)
 cur.execute(region_syddanmark)

@@ -211,8 +211,8 @@ def club_overview():
 		conn.close()
 		return render_template("club_overview.html", clubs=list_of_clubs)
 
-@app.route('/clubpage/<int:club_id>')
-def clubpage(club_id):
+@app.route('/clubpage/<int:club_id>/info')
+def clubpage_info(club_id):
 	conn = get_db_connection()
 	cur = conn.cursor()
 	cur.execute(
@@ -227,7 +227,7 @@ def clubpage(club_id):
 		date_from >= '{date}'
 		"""
 		.format(id = club.club_id,
-	  		date = date.today())
+			date = date.today())
 	)
 	fevents = cur.fetchall()
 	future_events = []
@@ -239,7 +239,7 @@ def clubpage(club_id):
 		SELECT * FROM event WHERE club_id = {id} AND
 		date_from < '{date}'
 		""".format(id = club.club_id,
-	     	date = date.today())
+			date = date.today())
 	)
 	pevents = cur.fetchall()
 	past_events = []
@@ -248,11 +248,113 @@ def clubpage(club_id):
 	cur.close()
 	conn.close()
 	print("Today: " + str(date.today()))
-	return render_template('clubpage.html', 
-			club=club,
-			future_events=future_events,
-			past_events=past_events,
-			today=date.today())
+	return render_template('clubs/club_info.html', 
+				club=club,
+				future_events=future_events,
+				past_events=past_events,
+				today=date.today(),
+				admin=user_has_administrative_rights(session.get('user_id'),club_id))
+
+
+@app.route('/clubpage/<int:club_id>/members')
+def clubpage_members(club_id):
+	conn = get_db_connection()
+	cur = conn.cursor()
+	cur.execute(
+		"SELECT * from club WHERE club_id = {}"
+		.format(club_id)
+	)
+	club = Club(cur.fetchone())
+	cur.execute(
+		"""
+		SELECT CONCAT(first_name, ' ', last_name) FROM member_rights
+		INNER JOIN member ON member_rights.user_id = member.user_id
+		WHERE club_id = {} AND right_id IN (1,2)
+		""".format(club_id)
+	)
+	member_names = cur.fetchall()
+	cur.close()
+	conn.close()
+	print("Member names: ")
+	print(member_names)
+	return render_template('clubs/club_members.html', 
+			club=club, 
+			members=member_names,
+			admin=user_has_administrative_rights(session.get('user_id'),club_id))
+
+@app.route('/clubpage/<int:club_id>/admin',methods=["GET","POST"])
+def clubpage_admin(club_id):
+	user_is_admin = user_has_administrative_rights(session.get('user_id'),club_id)
+	if user_is_admin:
+		if request.method == "GET":
+			conn = get_db_connection()
+			cur = conn.cursor()
+			cur.execute(
+				"SELECT * from club WHERE club_id = {}"
+				.format(club_id)
+			)
+			club = Club(cur.fetchone())
+			return render_template("clubs/club_admin.html", club=club, admin=user_is_admin)
+		else:
+			# Check the variables that are allowed to be null
+			max_spots = request.form.get('max_participants')
+			time_from = request.form.get('start_time')
+			time_to = request.form.get('end_time')
+			null = "null"
+			if not bool(max_spots):
+				max_spots = null
+			if not bool(time_from):
+				time_from = null
+			if not bool(time_to):
+				time_to = null
+
+			# Continue with the insertion
+			conn = get_db_connection()
+			cur = conn.cursor()
+			cur.execute(
+				"""
+				INSERT INTO event(name,info,max_spots,date_from,date_to,time_from,time_to,signup_opens,signup_closes,price,club_id,address,zipcode,city,country,is_cancelled,participants)
+				VALUES ('{title}','{desc}',{max_spots},'{date_from}','{date_to}','{time_from}','{time_to}','{signup_opens}','{signup_closes}',{price},{club_id},'{address}',{zipcode},'{city}','{country}',{cancelled},{participants})
+				"""
+				.format(title = request.form.get('title'),
+	    				desc = request.form.get('desc'),
+						max_spots = max_spots,
+						date_from = request.form.get('start_date'),
+						date_to = request.form.get('end_date'),
+						time_from = time_from,
+						time_to = time_to,
+						signup_opens = request.form.get('signup_opens'),
+						signup_closes = request.form.get('signup_closes'),
+						price = request.form.get('price'),
+						club_id = club_id,
+						address = request.form.get('address'),
+						zipcode = request.form.get('zipcode'),
+						city = request.form.get('zipcode'),
+						country = request.form.get('country'),
+						cancelled = False,
+						participants = 0)
+			)
+			conn.commit()
+			cur.close()
+			conn.close()
+			# Logic here to create event
+			return render_template("error.html")
+	flash("You shall not pass!",'error')
+	return redirect("/")
+
+def user_has_administrative_rights(user_id, club_id):
+	if user_id:
+		conn = get_db_connection()
+		cur = conn.cursor()
+		cur.execute(
+			"""
+			SELECT EXISTS(SELECT 1 FROM member_rights WHERE user_id = {user_id} AND club_id = {club_id}) AS user_is_admin
+			""".format(user_id=user_id, club_id=club_id)
+		)
+		user_is_admin = cur.fetchone()
+		return user_is_admin[0]
+	return False
+
 
 @app.route('/eventpage/<int:event_id>')
 def eventpage(event_id):

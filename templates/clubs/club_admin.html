@@ -1,0 +1,72 @@
+{% extends 'clubs/clubpage.html' %} {% block body %}
+<details>
+  <summary role="button">Create an event</summary>
+  <p><form action="{{ url_for('clubpage_admin', club_id=club.club_id)}}" method="POST">
+    <label for="title">
+        Title
+        <input type="text" id="title" name="title" placeholder="Title" required>
+    </label>
+    <label for="description">
+        Description
+        <input type="text" id="desc" name="desc" placeholder="Description" required>
+    </label>
+    <div class="grid">
+        <label for="start_date">
+            Starting date
+            <input type="date" id="start_date" name="start_date" placeholder="Start date" required>
+        </label>
+        <label for="end_date">
+            End date
+            <input type="date" id="end_date" name="end_date" placeholder="End date" required>
+        </label>
+    </div>
+    <div class="grid">
+        <label for="start_time">
+            Starting time (optional)
+            <input type="time" id="start_time" name="start_time" placeholder="Starting time">
+        </label>
+        <label for="end_time">
+            End time (optional)
+            <input type="time" id="end_time" name="end_time" placeholder="End time">
+        </label>
+    </div> 
+    <div class="grid">
+        <label for="signup_opens">
+            Date signup opens
+            <input type="date" id="signup_opens" name="signup_opens" placeholder="Date for opening of signup" required>
+        </label>
+        <label for="signup_closes">
+            Date signup closes
+            <input type="date" id="signup_closes" name="signup_closes" placeholder="Date for closing of signup" required>
+        </label>
+    </div>
+    <label for="price">
+        Price
+        <input type="number" id="price" name="price" placeholder="Price" required>
+    </label>
+    <label for="participation_limit">
+        Maximum number of participants (optional)
+        <input type="number" id="max_participants" name="max_participants" placeholder="Maximum number of participants">
+    </label>
+    <label for="location">
+        Address
+        <input type="text" id="address" name="address" placeholder="Address" required>
+        Zipcode
+        <input type="number" id="zipcode" name="zipcode" placeholder="Zipcode" required>
+        City
+        <input type="text" id="city" name="city" placeholder="City" required>
+        Country
+        <input type="text" id="country" name="country" placeholder="Country" required>
+    </label>
+    <label for="submit">
+        <button type="submit">Create event</button>
+    </label>
+  </form></p>
+</details>
+
+<details>
+  <summary role="button" class="secondary">View memberships</summary>
+  <p>…</p>
+</details>
+
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'clubs/clubpage.html' %} {% block body %} {% if not members %} {%
+else %}
+<table role="grid">
+  <tbody>
+    {% for member in members %}
+    <tr>
+      <th scope="row">{{member[0]}}</th>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %} {% endblock %}
