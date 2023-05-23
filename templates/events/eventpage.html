@@ -9,9 +9,10 @@
     <h4>{{event.date_from}} {{event.time_from}}-{{event.time_to}}</h4>
     {% elif event.date_from != event.date_to %}
     <h4>{{event.date_from}}-{{event.date_to}}</h4>
-    {% endif %} {% if event.max_spots == 0 and event.participants > 0 %}
+    {% endif %} {% if not event.max_spots and event.participants > 0 %}
     <p>{{event.participants}} signed up</p>
-    {% elif event.max_spots >= 0 and event.participants > 0 %}
+    {% elif not event.max_spots and event.participants == 0 %} {% elif
+    event.max_spots >= 0 and event.participants > 0 %}
     <p>{{event.participants}} signed up, {{event.max_spots}} available spots</p>
     {% else %} {% endif %}
   </hgroup>

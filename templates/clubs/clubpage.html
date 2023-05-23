@@ -1,13 +1,33 @@
 {% extends 'base.html' %} {% block content %}
 <div class="container">
   <h1>{{ club.name }}</h1>
+  <div class="grid">
+    <div>
+      <a
+        href="{{ url_for('clubpage_info', club_id=club.club_id) }}"
+        role="button"
+        >Info</a
+      >
+    </div>
+    <div>
+      <a
+        href="{{ url_for('clubpage_members', club_id=club.club_id) }}"
+        role="button"
+        >Members</a
+      >
+    </div>
+    {% if admin is true %}
+    <div>
+      <a
+        href="{{ url_for('clubpage_admin', club_id=club.club_id) }}"
+        role="button"
+        >Admin</a
+      >
+    </div>
+    {% endif %}
+  </div>
 </div>
-<article>
-  <body>
-    <b>About this club</b> <br />
-    {{club.info }}
-  </body>
-</article>
+<article>{% block body %} {% endblock %}</article>
 <details>
   <summary role="button" class="secondary">Contact information</summary>
   <p>
@@ -29,6 +49,7 @@
     </svg>
     {{ club.email }}
   </p>
+  {% if club.website %}
   <p>
     <a href="{{ url_for('external', url=club.website) }}">
       <svg
@@ -44,60 +65,8 @@
       {{club.website}}
     </a>
   </p>
+  {% endif %}
 </details>
-<div class="article">
-  <h2>Upcomming events</h2>
-  {% if not future_events %} {% else %}
-  <table role="grid">
-    <tbody>
-      {% for future_event in future_events %}
-      <tr>
-        <th scope="row">
-          <a href="{{ url_for('eventpage', event_id=future_event.event_id) }}"
-            >{{ future_event.name }}</a
-          >
-        </th>
-        <td>{{future_event.date_from}}</td>
-        <td>{{future_event.zipcode}}, {{future_event.city}}</td>
-        <td>
-          {% if future_event.is_cancelled %}
-          <b>Cancelled</b>
-          {% elif today >= future_event.signup_opens and today <
-          future_event.signup_closes %} Open for signup {% elif today >
-          future_event.signup_closes %} Signup date has passed {% elif
-          future_event.signup_opens > today %} Not yet open for signup <br />
-          <small> Opens {{future_event.signup_opens}}</small>
-          {% endif %}
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  {% endif %}
-</div>
-<div class="article">
-  <h2>Past events</h2>
-  {% if not past_events %} {% else %}
-  <table role="grid">
-    <tbody>
-      {% for past_event in past_events %}
-      <tr>
-        <th scope="row">
-          <a href="{{ url_for('eventpage', event_id=past_event.event_id) }}"
-            >{{ past_event.name }}</a
-          >
-        </th>
-        <td>{{past_event.date_from}}</td>
-        <td>{{past_event.zipcode}}, {{past_event.city}}</td>
-        <td>
-          {% if past_event.is_cancelled %}
-          <b>Cancelled</b>
-          {% else %} Read more {% endif %}
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  {% endif %}
-</div>
+<div class="article">{% block upcomming_events %} {% endblock %}</div>
+<div class="article">{% block past_events %} {% endblock %}</div>
 {% endblock %}
