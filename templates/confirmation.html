@@ -1,0 +1,41 @@
+{% extends 'base.html' %} {% block content %}
+<article>
+  {% if confirmed %} Event signups are now confirmed {% else %} {% if events %}
+  <table role="grid">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Event</th>
+        <th scope="col">Club</th>
+        <th scope="col">Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for event in events %}
+      <tr>
+        <th scope="row">{{ event.user_name }}</th>
+        <td>{{ event.event_name }}</td>
+        <td>{{ event.club_name }}</td>
+        <td>{{ event.price }} DKK</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <th scope="col">Total</th>
+        <td scope="col"></td>
+        <td scope="col"></td>
+        <td scope="col">{{total}} DKK</td>
+      </tr>
+    </tfoot>
+  </table>
+  <a
+    role="button"
+    style="width: 100%"
+    href="{{ url_for('confirmation', confirmed=true) }}"
+    >Confirm</a
+  >
+  {% else %} Looks like there's no events needing confirmation {% endif %} {%
+  endif %}
+</article>
+{% endblock %}
