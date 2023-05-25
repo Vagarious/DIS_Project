@@ -436,13 +436,12 @@ def event_participants(event_id):
 	conn.close()		
 	return render_template("events/participants.html", event=event, participants=participants[0])
 
-@app.route('/external/<url>')
+@app.route('/external/<path:url>', methods=["GET"])
 def external(url):
-	if url.startswith('http'):
-		website = url
+	if url.startswith('www.'):
+		return redirect('http://'+ url, code=302)
 	else:
-		website = "http://" + url
-	return redirect(website)
+		return redirect(url, code=302)
 
 if __name__ == '__main__':
 	app.debug=True
