@@ -65,6 +65,12 @@ vw_signups_path = 'sql_dll\\vw_signups.sql'
 with open(vw_signups_path, 'r') as fp:
     vw_signups = fp.read()
 
+# Below is the section to run creation of view for events that need confirmation
+vw_events_need_confirmation_path = 'sql_dll\\vw_events_need_confirmation.sql'
+
+with open(vw_events_need_confirmation_path, 'r') as fp:
+    vw_events_need_confirmation = fp.read()
+
 conn = get_db_connection()
 cur = conn.cursor()
 cur.execute(query)
@@ -79,6 +85,7 @@ cur.execute(region_sjælland)
 cur.execute(region_hovedstaden)
 cur.execute(vw_memberships)
 cur.execute(vw_signups)
+cur.execute(vw_events_need_confirmation)
 conn.commit()
 cur.close()
 conn.close()
