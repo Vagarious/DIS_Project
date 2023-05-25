@@ -5,6 +5,7 @@ from flask import Flask, flash, render_template, request, session, redirect, url
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 # Create a Flask app
 app = Flask(__name__)
 
@@ -34,11 +35,6 @@ def signup():
 		email = request.form["email"]
 		_hashedPassword = generate_password_hash(request.form["password"])
 		phone = request.form.get('phone')
-
-		if phone is None:
-			print("No phone number is provided")
-		else:
-			print("Phone number: ", phone)
 
 		conn = get_db_connection()
 		cur = conn.cursor()
@@ -75,14 +71,10 @@ def login():
 			user = cur.fetchone()
 			cur.close()
 			conn.close()
-			print("Hello")
 			if check_password_hash(user[2], request.form["password"]):
 				session["username"] = user[0]
-				print(user[0])
-				print(user[1])
 				session["firstname"] = user[1]
 				session["name"] = user[3]
-				print(session["name"])
 				session["city"] = user[4]
 				session["country"] = user[5]
 				session["user_id"] = user[6]
@@ -132,6 +124,41 @@ def profile_memberships():
 	cur.close()
 	conn.close()
 	return render_template("profile/memberships.html", memberships=memberships)
+
+@app.route('/confirmation')
+def confirmation():
+	user_id = request.args.get('user_id')
+	print(user_id)
+	confirmed = request.args.get('confirmed',default=False,type=bool)
+
+	conn = get_db_connection()
+	cur = conn.cursor()
+	if confirmed:
+		cur.execute(
+			"""
+			UPDATE member_events 
+			SET is_confirmed = true, date_for_signup = '{date}'
+			WHERE user_id = {user_id}
+			""".format(user_id=session["user_id"],date=date.today())
+		)
+		conn.commit()
+		cur.close()
+		conn.close()
+		return render_template("confirmation.html", confirmed=confirmed)
+	else:
+		cur.execute(
+			"SELECT * FROM events_need_confirmation WHERE user_id = {}"
+			.format(session["user_id"])
+		)
+		res = cur.fetchall()
+		events = []
+		total = 0
+		for event in res:
+			row = Event_wo_confirmation(event)
+			events.append(row)
+			total += row.price
+		return render_template("confirmation.html", events=events, total=total)
+
 
 @app.route('/overview', methods=["GET", "POST"])
 def club_overview():
@@ -248,12 +275,15 @@ def clubpage_info(club_id):
 	cur.close()
 	conn.close()
 	print("Today: " + str(date.today()))
+	print("User is member?: ")
+	print(user_is_member(session.get('user_id'),club_id))
 	return render_template('clubs/club_info.html', 
 				club=club,
 				future_events=future_events,
 				past_events=past_events,
 				today=date.today(),
-				admin=user_has_administrative_rights(session.get('user_id'),club_id))
+				admin=user_has_administrative_rights(session.get('user_id'),club_id),
+				member=user_is_member(session.get('user_id'),club_id))
 
 
 @app.route('/clubpage/<int:club_id>/members')
@@ -280,7 +310,35 @@ def clubpage_members(club_id):
 	return render_template('clubs/club_members.html', 
 			club=club, 
 			members=member_names,
-			admin=user_has_administrative_rights(session.get('user_id'),club_id))
+			admin=user_has_administrative_rights(session.get('user_id'),club_id),
+			member=user_is_member(session.get('user_id'),club_id))
+
+@app.route('/clubpage/<int:club_id>/join')
+def clubpage_join(club_id):
+	if session["user_id"]:
+		conn = get_db_connection()
+		cur = conn.cursor()
+		cur.execute(
+			"SELECT * from club WHERE club_id = {}"
+			.format(club_id)
+		)
+		club = Club(cur.fetchone())
+		if not user_is_member(session["user_id"],club_id):
+			cur.execute(
+				"""
+				INSERT INTO member_rights(user_id, club_id, right_id, is_active, expiration_date)
+				VALUES ({user_id}, {club_id}, 1, true, '{exp_date}')
+				""".format(user_id=session["user_id"],
+							club_id=club_id,
+							exp_date=date(date.today().year,12,31))
+			)
+		conn.commit()
+		cur.close()
+		conn.close()
+		return render_template("clubs/club_join.html", club=club, member=True)
+	
+	flash("You must sign in, or sign up, before you can join a club", "Error")
+	return redirect("/")
 
 @app.route('/clubpage/<int:club_id>/admin',methods=["GET","POST"])
 def clubpage_admin(club_id):
@@ -294,7 +352,7 @@ def clubpage_admin(club_id):
 				.format(club_id)
 			)
 			club = Club(cur.fetchone())
-			return render_template("clubs/club_admin.html", club=club, admin=user_is_admin)
+			return render_template("clubs/club_admin.html", club=club, admin=user_is_admin, member=user_is_member(session.get('user_id'),club_id))
 		else:
 			# Check the variables that are allowed to be null
 			max_spots = request.form.get('max_participants')
@@ -305,16 +363,17 @@ def clubpage_admin(club_id):
 				max_spots = null
 			if not bool(time_from):
 				time_from = null
-			if not bool(time_to):
 				time_to = null
 
 			# Continue with the insertion
 			conn = get_db_connection()
 			cur = conn.cursor()
-			cur.execute(
+
+			if time_from == "null":
+				cur.execute(
 				"""
 				INSERT INTO event(name,info,max_spots,date_from,date_to,time_from,time_to,signup_opens,signup_closes,price,club_id,address,zipcode,city,country,is_cancelled,participants)
-				VALUES ('{title}','{desc}',{max_spots},'{date_from}','{date_to}','{time_from}','{time_to}','{signup_opens}','{signup_closes}',{price},{club_id},'{address}',{zipcode},'{city}','{country}',{cancelled},{participants})
+				VALUES ('{title}','{desc}',{max_spots},'{date_from}','{date_to}',{time_from},{time_to},'{signup_opens}','{signup_closes}',{price},{club_id},'{address}',{zipcode},'{city}','{country}',{cancelled},{participants})
 				"""
 				.format(title = request.form.get('title'),
 	    				desc = request.form.get('desc'),
@@ -333,13 +392,37 @@ def clubpage_admin(club_id):
 						country = request.form.get('country'),
 						cancelled = False,
 						participants = 0)
-			)
+				)
+			else:
+				cur.execute(
+					"""
+					INSERT INTO event(name,info,max_spots,date_from,date_to,time_from,time_to,signup_opens,signup_closes,price,club_id,address,zipcode,city,country,is_cancelled,participants)
+					VALUES ('{title}','{desc}',{max_spots},'{date_from}','{date_to}','{time_from}','{time_to}','{signup_opens}','{signup_closes}',{price},{club_id},'{address}',{zipcode},'{city}','{country}',{cancelled},{participants})
+					"""
+					.format(title = request.form.get('title'),
+							desc = request.form.get('desc'),
+							max_spots = max_spots,
+							date_from = request.form.get('start_date'),
+							date_to = request.form.get('end_date'),
+							time_from = time_from,
+							time_to = time_to,
+							signup_opens = request.form.get('signup_opens'),
+							signup_closes = request.form.get('signup_closes'),
+							price = request.form.get('price'),
+							club_id = club_id,
+							address = request.form.get('address'),
+							zipcode = request.form.get('zipcode'),
+							city = request.form.get('zipcode'),
+							country = request.form.get('country'),
+							cancelled = False,
+							participants = 0)
+				)
 			conn.commit()
 			cur.close()
 			conn.close()
-			# Logic here to create event
-			return render_template("error.html")
-	flash("You shall not pass!",'error')
+			# PLEASE don't forget to change this to something meaningful...
+			return redirect(url_for('clubpage_admin', club_id=club_id, member=user_is_member(session.get('user_id'),club_id)))
+	flash("You shall not pass!",'Error')
 	return redirect("/")
 
 def user_has_administrative_rights(user_id, club_id):
@@ -348,11 +431,24 @@ def user_has_administrative_rights(user_id, club_id):
 		cur = conn.cursor()
 		cur.execute(
 			"""
-			SELECT EXISTS(SELECT 1 FROM member_rights WHERE user_id = {user_id} AND club_id = {club_id}) AS user_is_admin
+			SELECT EXISTS(SELECT 1 FROM member_rights WHERE user_id = {user_id} AND club_id = {club_id} AND right_id IN (2,3)) AS user_is_admin
 			""".format(user_id=user_id, club_id=club_id)
 		)
 		user_is_admin = cur.fetchone()
 		return user_is_admin[0]
+	return False
+
+def user_is_member(user_id, club_id):
+	if user_id:
+		conn = get_db_connection()
+		cur = conn.cursor()
+		cur.execute(
+			"""
+			SELECT EXISTS(SELECT 1 FROM member_rights WHERE user_id = {user_id} AND club_id = {club_id} AND right_id IN (1,2)) AS user_is_member
+			""".format(user_id=user_id, club_id=club_id)
+		)
+		user_is_member = cur.fetchone()
+		return user_is_member[0]
 	return False
 
 
