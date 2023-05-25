@@ -16,7 +16,15 @@
         >Members</a
       >
     </div>
-    {% if admin is true %}
+    {% if member %} {% else %}
+    <div>
+      <a
+        href="{{ url_for('clubpage_join', club_id=club.club_id) }}"
+        role="button"
+        >Join</a
+      >
+    </div>
+    {% endif %} {% if admin %}
     <div>
       <a
         href="{{ url_for('clubpage_admin', club_id=club.club_id) }}"
