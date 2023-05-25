@@ -30,3 +30,12 @@ class Event(tuple):
         self.country = event_data[15]
         self.is_cancelled = event_data[16]
         self.participants = event_data[17]
+
+class Event_wo_confirmation(tuple):
+    def __init__(self, data):
+        self.user_id = data[0]
+        self.event_id = data[1]
+        self.event_name = data[2]
+        self.user_name = data[3]
+        self.club_name = data[4]
+        self.price = data[5]
