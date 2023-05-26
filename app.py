@@ -127,9 +127,6 @@ def profile_memberships():
 
 @app.route('/confirmation')
 def confirmation():
-	user_id = request.args.get('user_id')
-	print(user_id)
-
 	conn = get_db_connection()
 	cur = conn.cursor()
 	cur.execute(
@@ -179,23 +176,6 @@ def confirmed():
 	for row in res:
 		confirmations.append(Event_w_confirmation(row))
 	return render_template("confirmed.html", events=confirmations)
-
-
-
-	conn = get_db_connection()
-	cur = conn.cursor()
-	for test in confirmations:
-		cur.execute(
-			"""
-			Update member_events
-			SET is_confirmed = true, date_for_signup = '{date}'
-			WHERE user_id = {user_id} AND event_id = {event_id}
-			""".format(user_id=session["user_id"], date=date.today(), event_id=test.event_id)
-	    )
-		conn.commit()
-	cur.close()
-	conn.close()
-	return render_template("confirmed.html", events=events)
 
 @app.route('/overview', methods=["GET", "POST"])
 def club_overview():
@@ -311,9 +291,6 @@ def clubpage_info(club_id):
 		past_events.append(Event(event))
 	cur.close()
 	conn.close()
-	print("Today: " + str(date.today()))
-	print("User is member?: ")
-	print(user_is_member(session.get('user_id'),club_id))
 	return render_template('clubs/club_info.html', 
 				club=club,
 				future_events=future_events,
@@ -342,8 +319,6 @@ def clubpage_members(club_id):
 	member_names = cur.fetchall()
 	cur.close()
 	conn.close()
-	print("Member names: ")
-	print(member_names)
 	return render_template('clubs/club_members.html', 
 			club=club, 
 			members=member_names,
@@ -352,7 +327,7 @@ def clubpage_members(club_id):
 
 @app.route('/clubpage/<int:club_id>/join')
 def clubpage_join(club_id):
-	if session["user_id"]:
+	if session.get("user_id"):
 		conn = get_db_connection()
 		cur = conn.cursor()
 		cur.execute(
@@ -360,10 +335,6 @@ def clubpage_join(club_id):
 			.format(club_id)
 		)
 		club = Club(cur.fetchone())
-		print("User is member:")
-		print(user_is_member(session["user_id"],club_id))
-		print("NOT user_is_member")
-		print(not user_is_member(session["user_id"],club_id))
 		if not user_is_member(session["user_id"],club_id):
 			cur.execute(
 				"""
@@ -502,7 +473,8 @@ def eventpage(event_id):
 	event = Event(cur.fetchone())
 	cur.close()
 	conn.close()
-	return render_template('events/eventpage.html', event=event)
+	is_member=user_is_member(session.get("user_id"),event.club_id)
+	return render_template('events/eventpage.html', event = event, member = is_member)
 
 @app.route('/events/signup/<int:event_id>', methods=["GET","POST"])
 def event_signup(event_id):
@@ -533,7 +505,8 @@ def event_signup(event_id):
 			event = Event(cur.fetchone())
 			cur.close()
 			conn.close()
-			return render_template("events/event_signup.html", event=event, exists=exists, confirmed=confirmed)
+			is_member = user_is_member(session["user_id"],event.club_id)
+			return render_template("events/event_signup.html", event=event, exists=exists, confirmed=confirmed, member = is_member)
 	else:
 		conn = get_db_connection()
 		cur = conn.cursor()
@@ -551,7 +524,8 @@ def event_signup(event_id):
 		event = Event(cur.fetchone())
 		cur.close()
 		conn.close()
-		return render_template('events/event_signup.html', event=event, exists=True, confirmed=False)
+		is_member = user_is_member(session.get("user_id"),event.club_id)
+		return render_template('events/event_signup.html', event=event, exists=True, confirmed=False, member = is_member)
 
 @app.route('/events/participants/<int:event_id>')
 def event_participants(event_id):
@@ -566,12 +540,14 @@ def event_participants(event_id):
 		""".format(id=event_id)
 		)
 	participants = cur.fetchall()
-	print(participants[0])
+	if participants:
+		participants = participants[0]
 	cur.execute("SELECT * FROM event WHERE event_id = {id}".format(id = event_id))
 	event = Event(cur.fetchone())
 	cur.close()
-	conn.close()		
-	return render_template("events/participants.html", event=event, participants=participants[0])
+	conn.close()
+	is_member = user_is_member(session.get("user_id"),event.club_id)
+	return render_template("events/participants.html", event=event, participants=participants, member = is_member)
 
 @app.route('/external/<path:url>', methods=["GET"])
 def external(url):
