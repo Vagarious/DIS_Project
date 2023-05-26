@@ -16,10 +16,13 @@
     {% elif not event.max_spots and event.participants == 0 %} {% elif
     event.max_spots >= 0 and event.participants > 0 %}
     <p>{{event.participants}} signed up, {{event.max_spots}} available spots</p>
-    {% else %} {% endif %}
+    {% elif event.max_spots >= 0 and event.participants == 0 %}
+    <p>{{event.max_spots}} available spots</p>
+    {% endif %}
   </hgroup>
 
   <div class="grid">
+    {% if member %}
     <div>
       <a
         href="{{ url_for('event_signup', event_id=event.event_id) }}"
@@ -27,6 +30,7 @@
         >Sign up</a
       >
     </div>
+    {% endif %}
     <div>
       <a
         href="{{ url_for('event_participants', event_id=event.event_id) }}"
