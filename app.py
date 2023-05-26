@@ -129,36 +129,73 @@ def profile_memberships():
 def confirmation():
 	user_id = request.args.get('user_id')
 	print(user_id)
-	confirmed = request.args.get('confirmed',default=False,type=bool)
 
 	conn = get_db_connection()
 	cur = conn.cursor()
-	if confirmed:
+	cur.execute(
+		"SELECT * FROM events_need_confirmation WHERE user_id = {}"
+		.format(session["user_id"])
+	)
+	res = cur.fetchall()
+	events = []
+	event_ids = ""
+	total = 0
+	for event in res:
+		row = Event_wo_confirmation(event)
+		events.append(row)
+		event_ids = string_append(event_ids, str(row.event_id))
+		total += row.price
+	return render_template("confirmation.html", events=events, total=total, ids=event_ids)
+
+def string_append(source, input):
+	("Source: %d", source)
+	if bool(source):
+		return (source + ", " + input)
+	else:
+		return input
+
+@app.route('/confirmed')
+def confirmed():
+	events = request.args.get('events')
+	
+	conn = get_db_connection()
+	cur = conn.cursor()
+	cur.execute(
+		"""
+		UPDATE member_events
+		SET is_confirmed = true, date_for_signup = '{date}'
+		WHERE user_id = {user_id} AND event_id IN ({ids})
+		""".format(date=date.today(), user_id=session["user_id"], ids=events)
+	)
+	conn.commit()
+	cur.execute(
+		"SELECT * FROM events_with_confirmation WHERE user_id = {user_id} AND event_id IN ({event_ids})"
+		.format(user_id = session["user_id"], event_ids = events)
+	)
+	res = cur.fetchall()
+	cur.close()
+	conn.close()
+	confirmations = []
+	for row in res:
+		confirmations.append(Event_w_confirmation(row))
+	return render_template("confirmed.html", events=confirmations)
+
+
+
+	conn = get_db_connection()
+	cur = conn.cursor()
+	for test in confirmations:
 		cur.execute(
 			"""
-			UPDATE member_events 
+			Update member_events
 			SET is_confirmed = true, date_for_signup = '{date}'
-			WHERE user_id = {user_id}
-			""".format(user_id=session["user_id"],date=date.today())
-		)
+			WHERE user_id = {user_id} AND event_id = {event_id}
+			""".format(user_id=session["user_id"], date=date.today(), event_id=test.event_id)
+	    )
 		conn.commit()
-		cur.close()
-		conn.close()
-		return render_template("confirmation.html", confirmed=confirmed)
-	else:
-		cur.execute(
-			"SELECT * FROM events_need_confirmation WHERE user_id = {}"
-			.format(session["user_id"])
-		)
-		res = cur.fetchall()
-		events = []
-		total = 0
-		for event in res:
-			row = Event_wo_confirmation(event)
-			events.append(row)
-			total += row.price
-		return render_template("confirmation.html", events=events, total=total)
-
+	cur.close()
+	conn.close()
+	return render_template("confirmed.html", events=events)
 
 @app.route('/overview', methods=["GET", "POST"])
 def club_overview():
@@ -323,6 +360,10 @@ def clubpage_join(club_id):
 			.format(club_id)
 		)
 		club = Club(cur.fetchone())
+		print("User is member:")
+		print(user_is_member(session["user_id"],club_id))
+		print("NOT user_is_member")
+		print(not user_is_member(session["user_id"],club_id))
 		if not user_is_member(session["user_id"],club_id):
 			cur.execute(
 				"""
