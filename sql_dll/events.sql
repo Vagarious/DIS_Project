@@ -113,7 +113,7 @@ VALUES
     For juniorer (under 22 år) giver Hrimnir et tilskud på 250 kr per undervisning.
     Derudover er det muligt for Hrimnir medlemmer at leje klubbens trailer. Denne bookes separat på Sporti. 
     Evt. forplejning og drikkevarer skal du selv medbringe, da der ikke er mulighed for at købe på stederne.',
-    0,'2023-06-24','2023-06-25',null,null,'2023-05-01','2023-06-21',650,29,'Lejrvej 2',3500,'Værløse','Danmark',false,0),
+    null,'2023-06-24','2023-06-25',null,null,'2023-05-01','2023-06-21',650,29,'Lejrvej 2',3500,'Værløse','Danmark',false,0),
 
     ('Kratlusker-stævne i Vestskoven','D. 10 september inviterer Hrimnir til Kratlusker-stævne i Vestskoven, med base på Kroppedal.
     Stævnet er et hyggestævne, som ikke kræver rytterlicens.
@@ -149,4 +149,4 @@ VALUES
     Medbring egen vandspand. Folden skal rengøres, før du forlader den.
     Der forefindes også tre bomme tæt på ridebanen, hvor din hest kan bindes.
     Der er mulighed for at parkere et begrænset antal trailere på Havrebjerggaard.',
-    0,'2023-04-30','2023-04-30','09:00:00','13:00:00','2023-01-01','2023-04-01',100,29,'Snubbekorsvej 9',2630,'Taastrup','Danmark',false,0);
+    null,'2023-04-30','2023-04-30','09:00:00','13:00:00','2023-01-01','2023-04-01',100,29,'Snubbekorsvej 9',2630,'Taastrup','Danmark',false,0);

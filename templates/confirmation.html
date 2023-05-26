@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block content %}
 <article>
-  {% if confirmed %} Event signups are now confirmed {% else %} {% if events %}
+  {% if events %}
   <table role="grid">
     <thead>
       <tr>
@@ -32,10 +32,9 @@
   <a
     role="button"
     style="width: 100%"
-    href="{{ url_for('confirmation', confirmed=true) }}"
+    href="{{ url_for('confirmed', events=ids) }}"
     >Confirm</a
   >
-  {% else %} Looks like there's no events needing confirmation {% endif %} {%
-  endif %}
+  {% else %} Looks like there's no events needing confirmation {% endif %}
 </article>
 {% endblock %}

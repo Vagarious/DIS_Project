@@ -39,3 +39,12 @@ class Event_wo_confirmation(tuple):
         self.user_name = data[3]
         self.club_name = data[4]
         self.price = data[5]
+
+class Event_w_confirmation(tuple):
+    def __init__(self, data):
+        self.user_id = data[0]
+        self.event_id = data[1]
+        self.name = data[2]
+        self.event_name = data[3]
+        self.club_name = data[4]
+        self.is_confirmed = data[5]

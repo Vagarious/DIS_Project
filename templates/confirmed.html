@@ -1,0 +1,23 @@
+{% extends 'base.html' %} {% block content %}
+<article>
+  You have now confirmed signups for the following events
+  <table role="grid">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Event</th>
+        <th scope="col">Club</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for event in events %}
+      <tr>
+        <th scope="row">{{ event.name }}</th>
+        <td>{{ event.event_name }}</td>
+        <td>{{ event.club_name }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</article>
+{% endblock %}

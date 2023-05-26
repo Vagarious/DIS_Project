@@ -71,6 +71,17 @@ vw_events_need_confirmation_path = 'sql_dll\\vw_events_need_confirmation.sql'
 with open(vw_events_need_confirmation_path, 'r') as fp:
     vw_events_need_confirmation = fp.read()
 
+# Below is the section to run creation of view for events that have confirmation
+vw_events_with_confirmation_path = 'sql_dll\\vw_events_with_confirmation.sql'
+
+with open(vw_events_with_confirmation_path, 'r') as fp:
+    vw_events_with_confirmation = fp.read()
+
+# Below is the section to run creation of functions and triggers
+functions_and_triggers_path = 'sql_dll\\functions_and_triggers.sql'
+with open(functions_and_triggers_path, 'r') as fp:
+    functions_and_triggers = fp.read()
+
 conn = get_db_connection()
 cur = conn.cursor()
 cur.execute(query)
@@ -86,6 +97,8 @@ cur.execute(region_hovedstaden)
 cur.execute(vw_memberships)
 cur.execute(vw_signups)
 cur.execute(vw_events_need_confirmation)
+cur.execute(vw_events_with_confirmation)
+cur.execute(functions_and_triggers)
 conn.commit()
 cur.close()
 conn.close()
