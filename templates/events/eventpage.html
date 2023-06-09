@@ -47,5 +47,8 @@
       {% block body %} {{event.info}} {% endblock %}
     </body>
   </article>
+  <a href="{{ url_for('clubpage_info', club_id=event.club_id) }}"
+    >Go to club-page</a
+  >
 </div>
 {% endblock %}
