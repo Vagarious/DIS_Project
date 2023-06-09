@@ -104,11 +104,10 @@ def confirmed():
 	
 	return render_template("confirmed.html", events=confirmations)
 
-@app.route('/overview', methods=["GET", "POST"])
+@app.route('/club-overview', methods=["GET", "POST"])
 def club_overview():
 	if request.method == "GET":
 		clubs = get_all_clubs()
-		return render_template("club_overview.html", clubs=clubs)
 	else:
 		# Three cases
 		searchText = request.form.get('search_text')
@@ -129,7 +128,7 @@ def club_overview():
 			else:
 				clubs = search_clubs_by_text_and_region(searchText, region_selected)
 		
-		return render_template("club_overview.html", clubs=clubs)
+	return render_template("club_overview.html", clubs=clubs)
 
 @app.route('/clubpage/<int:club_id>/info')
 def clubpage_info(club_id):
@@ -198,6 +197,31 @@ def clubpage_admin(club_id):
 	flash("You shall not pass!",'Error')
 
 	return redirect("/")
+
+@app.route('/event-overview', methods=["GET", "POST"])
+def event_overview():
+	if request.method == "GET":
+		events = get_all_events()
+	else:
+		# Three cases
+		searchText = request.form.get('search_text')
+		region_selected = request.form.get('search_region')
+		
+		# Case 1: Searchtext and no region selected
+		if searchText is not None and region_selected is None:
+			events = search_events_by_text(searchText)
+		# Case 2: No searchtext but region selected
+		elif not searchText and region_selected is not None:
+			if region_selected == "all":
+				return redirect('/event-overview')
+			events = search_events_by_region(region_selected)
+		else:
+		# Case 3: Both searchtext and region selected
+			if region_selected == "all":
+				events = search_events_by_text(searchText)
+			else:
+				events = search_events_by_text_and_region(searchText, region_selected)
+	return render_template('events/event_overview.html', events = events, today = date.today())
 
 @app.route('/eventpage/<int:event_id>')
 def eventpage(event_id):
