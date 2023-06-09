@@ -1,3 +1,4 @@
+from datetime import date
 from db import *
 from classes import *
 
@@ -46,3 +47,19 @@ def string_append(source, input):
 		return (source + ", " + input)
 	else:
 		return input
+	
+def signup_for_event_is_open(event):
+	return event.signup_opens <= date.today() <= event.signup_closes
+
+def determine_signup_status_for_event(event):
+	open = False
+	# If there is a limit for number of participants
+	if event.max_spots is not None and not event.is_cancelled:
+		# Check that date is within period, and that there are remaining spots
+		if signup_for_event_is_open(event) and event.max_spots > 0:
+			open = True
+	else:
+		# Check that date is within period
+		if signup_for_event_is_open(event) and not event.is_cancelled:
+			open = True
+	return open

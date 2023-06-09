@@ -203,8 +203,9 @@ def clubpage_admin(club_id):
 def eventpage(event_id):
 	event = get_event_info(event_id)
 	is_member = user_is_member(session.get("user_id"), event.club_id)
+	signup_open = determine_signup_status_for_event(event)
 
-	return render_template('events/eventpage.html', event = event, member = is_member)
+	return render_template('events/eventpage.html', event = event, member = is_member, signup_open = signup_open)
 
 @app.route('/events/signup/<int:event_id>', methods=["GET","POST"])
 def event_signup(event_id):
@@ -213,22 +214,25 @@ def event_signup(event_id):
 			flash("You must sign up or log in before signing up for events", "Error")
 			return redirect("/")
 		else:
+			event = get_event_info(event_id)
+			if not determine_signup_status_for_event(event):
+				flash("Event is not open for signup", "Error")
+				return redirect("/")
 			registrationStatus = get_registration_status(session["user_id"], event_id)
+			# if the entry does not exists, then the user hasn't signed up for the event and is shown the form
 			if registrationStatus is None:
 				exists = False
 				confirmed = False
-			elif registrationStatus[0] is False:
+			# if entry exists and is false, then the user is registered but not confirmed
+			elif registrationStatus is False:
 				exists = True
 				confirmed = False
-			elif registrationStatus[0]:
+			# if the entry exists and is true, then the user has confirmed the registration
+			elif registrationStatus:
 				exists = True
 				confirmed = True
-			# if entry exists and is false, then the user is registered but not confirmed
-			# if the entry exists and is true, then the user has confirmed the registration
-			# if the entry does not exists, then the user hasn't signed up for the event and is shown the form
-			event = get_event_info(event_id)
 			is_member = user_is_member(session["user_id"], event.club_id)
-			return render_template("events/event_signup.html", event=event, exists=exists, confirmed=confirmed, member = is_member)
+			return render_template("events/event_signup.html", event = event, exists = exists, confirmed = confirmed, member = is_member)
 	else:
 		sign_up_for_event(session["user_id"], event_id)
 		event = get_event_info(event_id)
