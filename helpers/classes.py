@@ -73,9 +73,10 @@ class User(tuple):
 class SignUps(tuple):
     def __init__(self, data):
         self.user_id = data[0]
-        self.event_name = data[1]
-        self.name = data[2]
-        self.signup_date = data[3]
+        self.event_id = data[1]
+        self.event_name = data[2]
+        self.name = data[3]
+        self.signup_date = data[4]
 
 class Membership(tuple):
     def __init__(self, data):

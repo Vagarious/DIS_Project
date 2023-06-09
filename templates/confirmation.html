@@ -14,7 +14,11 @@
       {% for event in events %}
       <tr>
         <th scope="row">{{ event.user_name }}</th>
-        <td>{{ event.event_name }}</td>
+        <td>
+          <a href="{{ url_for('eventpage', event_id=event.event_id) }}"
+            >{{ event.event_name }}</a
+          >
+        </td>
         <td>{{ event.club_name }}</td>
         <td>{{ event.price }} DKK</td>
       </tr>

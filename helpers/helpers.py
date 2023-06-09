@@ -1,6 +1,6 @@
 from datetime import date
-from db import *
-from classes import *
+from helpers.db import *
+from helpers.classes import *
 
 
 def make_list_of_clubs(query_result):
@@ -27,7 +27,7 @@ def user_has_administrative_rights(user_id, club_id):
 		cur = conn.cursor()
 		cur.execute(
 			"""
-			SELECT EXISTS(SELECT 1 FROM member_rights WHERE user_id = {user_id} AND club_id = {club_id} AND right_id IN (2,3)) AS user_is_admin
+			SELECT EXISTS(SELECT 1 FROM member_rights WHERE (user_id = {user_id} AND club_id = {club_id} AND right_id = 2 and is_active = true) OR (user_id = {user_id} AND right_id = 3) and is_active = true) AS user_is_admin
 			""".format(user_id=user_id, club_id=club_id)
 		)
 		user_is_admin = cur.fetchone()
@@ -40,7 +40,7 @@ def user_is_member(user_id, club_id):
 		cur = conn.cursor()
 		cur.execute(
 			"""
-			SELECT EXISTS(SELECT 1 FROM member_rights WHERE user_id = {user_id} AND club_id = {club_id} AND right_id IN (1,2)) AS user_is_member
+			SELECT EXISTS(SELECT 1 FROM member_rights WHERE user_id = {user_id} AND club_id = {club_id} AND right_id IN (1,2) AND is_active = true) AS user_is_member
 			""".format(user_id=user_id, club_id=club_id)
 		)
 		user_is_member = cur.fetchone()

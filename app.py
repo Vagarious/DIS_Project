@@ -1,9 +1,9 @@
-from db import *
-from classes import *
+from helpers.db import *
+from helpers.classes import *
 from datetime import date
 from flask import Flask, flash, render_template, request, session, redirect, url_for
 from flask_session import Session
-from helpers import *
+from helpers.helpers import *
 from queries.clubs import *
 from queries.events import *
 from queries.members import *
@@ -119,7 +119,7 @@ def club_overview():
 		# Case 2: No searchtext but region selected
 		elif not searchText and region_selected is not None:
 			if region_selected == "all":
-				return redirect('/overview')
+				return redirect('/club-overview')
 			clubs = search_clubs_by_region(region_selected)
 		else:
 		# Case 3: Both searchtext and region selected
@@ -128,7 +128,7 @@ def club_overview():
 			else:
 				clubs = search_clubs_by_text_and_region(searchText, region_selected)
 		
-	return render_template("club_overview.html", clubs=clubs)
+	return render_template("clubs/club_overview.html", clubs=clubs)
 
 @app.route('/clubpage/<int:club_id>/info')
 def clubpage_info(club_id):

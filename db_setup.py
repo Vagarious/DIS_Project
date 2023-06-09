@@ -1,14 +1,20 @@
-from db import *
+from helpers.db import *
 from string import Template
 from werkzeug.security import generate_password_hash
 
 # Below is the section to run the database initialisation
-db_init_path = 'db_init.sql'
+db_init_path = 'sql_dll\\db_init.sql'
 
 with open(db_init_path, 'r') as fp:
-    init_sql = fp.read()
+    db_init = fp.read()
 
-query = Template(init_sql).substitute(
+# Below is the section to run creation of members
+members_path = 'sql_dll\\members.sql'
+
+with open(members_path, 'r') as fp:
+    query = fp.read()
+
+members = Template(query).substitute(
     password1 = generate_password_hash('123')
 )
 
@@ -90,7 +96,8 @@ with open(functions_and_triggers_path, 'r') as fp:
 
 conn = get_db_connection()
 cur = conn.cursor()
-cur.execute(query)
+cur.execute(db_init)
+cur.execute(members)
 cur.execute(clubs)
 cur.execute(events)
 cur.execute(member_events)

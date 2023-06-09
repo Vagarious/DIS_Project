@@ -10,7 +10,7 @@ VALUES
     150kr. ekskl. administrationsgebyr for Teitur medlemmer.
     300kr. ekskl. administrationsgebyr for ikke medlemmer.
     Prisen er inkl. sandwich og sodavand.',
-    35,'2023-06-08','2023-06-08',null,null,'2023-05-01','2023-06-01',150,44,'Hollænderhallen - Mødelokale 3, Halvejen 3',2791,'Dragør','Danmark',false,0),
+    34,'2023-06-08','2023-06-08',null,null,'2023-05-01','2023-06-01',150,44,'Hollænderhallen - Mødelokale 3, Halvejen 3',2791,'Dragør','Danmark',false,1),
 
     ('Kursus med Maj-Brit Rønnov','Jeg kommer til Sjælland og tilbyder 2 kurser. Jeg bygger dem op udelukkende med fokus på den islandske hest. Det er vigtigt for mig at man har en god kontakt til sin hest og at man mærker den vil én og nyder selskabet og arbejdet med den. Jeg har i over 15 år udbudt undervisning, ridelejre, weekendkurser mm med hovedfokus på at styrke samarbejdet med hesten, nørde i dens psykologi, reaktioner og kommunikation. Sammen med dette har jeg en stor interesse i at give mine kursister redskaber til at arbejde med hesten på forskellige måder, der styrker dens balance, muskulatur, kropskontrol og lysten til at lære.
     Normalt afholder disse kurser på mit kursuscenter i Ringkøbing men jeg har i samarbejde med Anette Bøgvald Sainis planlagt to kurser på hendes sted.
