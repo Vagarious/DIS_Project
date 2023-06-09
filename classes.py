@@ -1,6 +1,4 @@
-from flask_login import UserMixin
-
-class Club(tuple, UserMixin):
+class Club(tuple):
     def __init__(self, club_data):
         self.club_id = club_data[0]
         self.info = club_data[1]
@@ -48,3 +46,29 @@ class Event_w_confirmation(tuple):
         self.event_name = data[3]
         self.club_name = data[4]
         self.is_confirmed = data[5]
+
+class User(tuple):
+    def __init__(self, data):
+        self.email = data[0]
+        self.first_name = data[1]
+        self.password = data[2]
+        self.name = data[3]
+        self.city = data[4]
+        self.country = data[5]
+        self.user_id = data[6]
+
+class SignUps(tuple):
+    def __init__(self, data):
+        self.user_id = data[0]
+        self.event_name = data[1]
+        self.name = data[2]
+        self.signup_date = data[3]
+
+class Membership(tuple):
+    def __init__(self, data):
+        self.user_id = data[0]
+        self.number = data[1]
+        self.name = data[2]
+        self.club = data[3]
+        self.status = data[4]
+        self.expiration = data[5]

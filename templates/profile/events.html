@@ -12,9 +12,9 @@ you have signed up for {% endblock %} {% block table %}
     {% if not events %} {% else %} {% for event in events %}
 
     <tr>
-      <th scope="row">{{ event[1] }}</th>
-      <td>{{ event[2] }}</td>
-      <td>{{ event[3] }}</td>
+      <th scope="row">{{ event.event_name }}</th>
+      <td>{{ event.name }}</td>
+      <td>{{ event.signup_date }}</td>
     </tr>
     {% endfor %} {% endif %}
   </tbody>
