@@ -13,15 +13,15 @@ memberships {% endblock %} {% block table %}
   <tbody>
     {% if not memberships %} {% else %} {% for membership in memberships %}
     <tr>
-      <th scope="row">{{ membership[1] }}</th>
-      <td>{{ membership[2] }}</td>
-      <td>{{ membership[3] }}</td>
-      {% if membership[4] is true %}
+      <th scope="row">{{ membership.number }}</th>
+      <td>{{ membership.name }}</td>
+      <td>{{ membership.club }}</td>
+      {% if membership.status is true %}
       <td>Active</td>
       {% else %}
       <td>Inactive</td>
       {% endif %}
-      <td>{{ membership[5] }}</td>
+      <td>{{ membership.expiration }}</td>
     </tr>
     {% endfor %} {% endif %}
   </tbody>
