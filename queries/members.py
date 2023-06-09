@@ -1,6 +1,6 @@
-from classes import *
+from helpers.classes import *
 from datetime import date
-from db import *
+from helpers.db import *
 from werkzeug.security import check_password_hash
 
 def create_user(firstname, lastname, gender, birthdate, country, address, zipcode, city, email, password, phone):

@@ -12,7 +12,11 @@ you have signed up for {% endblock %} {% block table %}
     {% if not events %} {% else %} {% for event in events %}
 
     <tr>
-      <th scope="row">{{ event.event_name }}</th>
+      <th scope="row">
+        <a href="{{ url_for('eventpage', event_id = event.event_id) }}"
+          >{{ event.event_name }}</a
+        >
+      </th>
       <td>{{ event.name }}</td>
       <td>{{ event.signup_date }}</td>
     </tr>

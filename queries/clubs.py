@@ -1,6 +1,6 @@
 from datetime import date
-from db import *
-from helpers import *
+from helpers.db import *
+from helpers.helpers import *
 
 def get_all_clubs():
     conn = get_db_connection()

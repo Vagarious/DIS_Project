@@ -1,4 +1,4 @@
-from helpers import *
+from helpers.helpers import *
 
 def create_event(title, desc, max_spots, date_from, date_to, time_from, time_to, signup_opens, signup_closes, price, club_id, address, zipcode, city, country):
     # Check the variables which are allowed to be null

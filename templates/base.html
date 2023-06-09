@@ -75,7 +75,11 @@
         </li>
         {% endif %} {% if session.name %}
         <li>
-          <a href="{{ url_for('confirmation', user_id=session.user_id) }}">
+          <a
+            data-tooltip="Confirm sign-ups"
+            data-placement="bottom"
+            href="{{ url_for('confirmation', user_id=session.user_id) }}"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"

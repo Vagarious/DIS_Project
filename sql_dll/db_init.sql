@@ -58,10 +58,10 @@ DROP TABLE IF EXISTS member_rights;
 CREATE TABLE member_rights(
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
-    club_id INT NOT NULL,
+    club_id INT,
     right_id INT NOT NULL,
     is_active BOOLEAN NOT NULL,
-    expiration_date DATE NOT NULL,
+    expiration_date DATE,
     FOREIGN KEY (user_id) REFERENCES member(user_id),
     FOREIGN KEY (club_id) REFERENCES club(club_id),
     FOREIGN KEY (right_id) REFERENCES type_right(right_id)
@@ -77,9 +77,6 @@ CREATE TABLE member_events(
     FOREIGN KEY (user_id) REFERENCES member(user_id),
     FOREIGN KEY (event_id) REFERENCES event(event_id)
 );
-
-INSERT INTO member (email, password, first_name, last_name, gender, birth_date, country, address, zipcode, city, phone)
-VALUES ('camillapasser@gmail.com', '$password1', 'Camilla', 'Passer Hvidman', 'Kvinde', '1997-03-01', 'Danmark', 'Valnøddegården 21', 2620, 'Albertslund', '20661013');
 
 INSERT INTO type_right(type_right)
 VALUES ('member'), ('admin'), ('global_admin');
