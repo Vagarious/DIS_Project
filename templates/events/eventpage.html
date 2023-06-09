@@ -2,7 +2,9 @@
 <div class="container">
   <h1>{{event.name}}</h1>
   <hgroup>
-    {% if event.date_from == event.date_to and not event.time_from %}
+    {% if event.is_cancelled %}
+    <h4>Cancelled</h4>
+    {% else %} {% if event.date_from == event.date_to and not event.time_from %}
     <h4>{{event.date_from}}</h4>
     {% elif event.date_from == event.date_to and event.time_from and
     event.time_to %}
@@ -18,11 +20,11 @@
     <p>{{event.participants}} signed up, {{event.max_spots}} available spots</p>
     {% elif event.max_spots >= 0 and event.participants == 0 %}
     <p>{{event.max_spots}} available spots</p>
-    {% endif %}
+    {% endif %} {% endif %}
   </hgroup>
 
   <div class="grid">
-    {% if member %}
+    {% if member and signup_open %}
     <div>
       <a
         href="{{ url_for('event_signup', event_id=event.event_id) }}"
