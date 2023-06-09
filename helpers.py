@@ -15,6 +15,12 @@ def make_list_of_events(query_result):
         events.append(Event(row))
     return events
 
+def make_list_of_events_for_overview(query_result):
+	events = []
+	for row in query_result:
+		events.append(Event_for_overview(row))
+	return events
+
 def user_has_administrative_rights(user_id, club_id):
 	if user_id:
 		conn = get_db_connection()

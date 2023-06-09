@@ -1,0 +1,91 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+  <h1>Events</h1>
+  Here you can find the events of all clubs
+
+  <label for="search_parameters">
+    <form method="POST" name="search_parameters">
+      <div class="grid">
+        <label for="search_field">
+          <input
+            type="search"
+            id="search_text"
+            name="search_text"
+            placeholder="Search"
+          />
+        </label>
+        <label for="region_selector">
+          <select
+            onchange="search_parameters.submit()"
+            name="search_region"
+            id="search_region"
+          >
+            <option value="none" disabled selected>Select region</option>
+            <option value="all">Alle</option>
+            <option value="nordjylland">Nordjylland</option>
+            <option value="midtjylland">Midtjylland</option>
+            <option value="syddanmark">Syddanmark</option>
+            <option value="sjælland">Sjælland</option>
+            <option value="hovedstaden">Hovedstaden</option>
+          </select>
+        </label>
+      </div>
+    </form>
+  </label>
+  {% if not events %} {% else %}
+  <table role="grid">
+    <tbody>
+      {% for event in events %}
+      <tr>
+        <th scope="row" name="info">
+          <a href="{{ url_for('eventpage', event_id=event.event_id) }}"
+            >{{ event.name }}</a
+          >
+        </th>
+        <td>{{event.date_from}}</td>
+        <td>{{event.zipcode}}, {{ event.city}}</td>
+        <!-- Hvis arrangementet er aflyst -->
+        {% if event.is_cancelled %}
+        <td>Cancelled</td>
+        <!-- Hvis arrangementet ikke er aflyst -->
+        {% else %}
+        <!-- Hvis arrangementet er afholdt -->
+        {% if today > event.date_from %}
+        <td>Conducted</td>
+        <!-- Hvis arrangementet ikke er afholdt -->
+        {% else %}
+        <!-- Hvis der ikke er begrænsning -->
+        {% if event.max_spots is none %}
+        <!-- Hvis dagens dato ligger imellem åben og luk for tilmelding -->
+        {% if event.signup_closes >= today and today >= event.signup_opens %}
+        <td>Signup is open</td>
+        <!-- Hvis dagens dato ligger efter tilmelding luk -->
+        {% elif today > event.signup_closes %}
+        <td>Signup is closed</td>
+        <!-- Hvis dagens dato ligger før tilmeldings åben -->
+        {% elif event.signup_opens > today %}
+        <td>Signup opens {{event.signup_opens}}</td>
+        {% endif %}
+        <!-- Hvis der er begrænsning, men flere ledige pladser tilbage -->
+        {% elif event.max_spots > 0 %}
+        <!-- Hvis dagens dato ligger imellem åben og luk for tilmelding -->
+        {% if event.signup_closes >= today and today >= event.signup_opens %}
+        <td>Signup is open</td>
+        <!-- Hvis dagens dato ligger efter tilmelding luk -->
+        {% elif today > event.signup_closes %}
+        <td>Signup is closed</td>
+        <!-- Hvis dagens dato ligger før tilmeldings åben -->
+        {% elif event.signup_opens > today %}
+        <td>Signup opens {{event.signup_opens}}</td>
+        {% endif %}
+        <!-- Hvis der er begrænsning, og ikke flere ledige pladser tilbage -->
+        {% elif event.max_spots == 0 %}
+        <td>No more spots</td>
+        {% endif %} {% endif %} {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</div>
+{% endblock %}

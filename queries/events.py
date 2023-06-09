@@ -106,3 +106,74 @@ def get_event_participants(event_id):
         participants = participants[0]
     
     return participants
+
+def get_all_events():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "SELECT * FROM events_for_overview"
+    )
+    result = cur.fetchall()
+    events = make_list_of_events_for_overview(result)
+
+    return events
+
+def search_events_by_text(text):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(
+        """
+        SELECT * FROM events_for_overview
+        WHERE LOWER(name) like LOWER('%{text}%') OR
+        zipcode::TEXT = '%{text}%' OR
+        LOWER(city) like LOWER('%{text}%')
+        """
+        .format(text = text)
+    )
+    result = cur.fetchall()
+    cur.close()
+    conn.close()
+    events = make_list_of_events_for_overview(result)
+
+    return events
+
+def search_events_by_region(region):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(
+        """
+        SELECT * FROM events_for_overview
+        WHERE zipcode IN (
+            SELECT zipcode FROM region_{region}
+        )
+        """.format(region = region)
+    )
+    result = cur.fetchall()
+    cur.close()
+    conn.close()
+    events = make_list_of_events_for_overview(result)
+
+    return events
+
+def search_events_by_text_and_region(text, region):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(
+        """
+        SELECT * FROM events_for_overview
+        WHERE
+        (LOWER(name) like LOWER('%{text}%') OR
+        zipcode::TEXT = '%{text}%' OR
+        LOWER(city) like LOWER('%{text}%'))
+        AND
+        (zipcode IN (
+            SELECT zipcode FROM region_{region}
+        ))
+        """.format(text = text, region = region)
+    )
+    result = cur.fetchall()
+    cur.close()
+    conn.close()
+    events = make_list_of_events_for_overview(result)
+
+    return events

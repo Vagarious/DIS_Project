@@ -29,6 +29,19 @@ class Event(tuple):
         self.is_cancelled = event_data[16]
         self.participants = event_data[17]
 
+class Event_for_overview(tuple):
+    def __init__(self, event_data):
+        self.event_id = event_data[0]
+        self.club_id = event_data[1]
+        self.name = event_data[2]
+        self.zipcode = event_data[3]
+        self.city = event_data[4]
+        self.is_cancelled = event_data[5]
+        self.date_from = event_data[6]
+        self.signup_opens = event_data[7]
+        self.signup_closes = event_data[8]
+        self.max_spots = event_data[9]
+
 class Event_wo_confirmation(tuple):
     def __init__(self, data):
         self.user_id = data[0]
