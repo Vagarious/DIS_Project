@@ -32,7 +32,9 @@ Global_admins are supposed to be able to see and do everything.
 
 Once the user is signed in, the navbar will change to show the users first-name as a dropdown for the user-page, where you can see information about your profile (not yet implemented), a list of all events that you have signed up for (and confirmed) and clubs that you are a member (or admininistrator) of.
 The basket-icon is where you confirm events that you wish to sign up for (more about that in the section for [confirming event-signups](#confirm-event-signup))
+
 ![navbar](assets/img/navbar-signed-in.png)
+
 Unfortunately it is not yet possible to select language (the dropdown doesn't yet have a function), but you can enjoy the images of the flags. The global search-function has also yet to be implemented, and as for the current version, the icon is just for decoration....
 
 ## Clubs
